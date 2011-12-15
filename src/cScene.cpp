@@ -108,6 +108,23 @@ void cScene::MoveByRadar(int x,int y)
 	else			cy-=8;
 }
 
+
+void cScene::MoveScroll(int x,int y)
+{
+	//move=0..12,0..15
+	//rect=(80x68)/4=20x17
+
+	cx=x;
+	cy=y;
+
+	if(cx<=9)		cx=0;
+	else if(cx>=21)	cx=12;
+	else			cx-=9;
+	
+	if(cy<=8)		cy=0;
+	else if(cy>=23)	cy=15;
+	else			cy-=8;
+}
 bool cScene::Visible(int cellx,int celly)
 {
 	/*VMH Devuelve si la casilla cx,cy está actualmente dentro de zona visible.
@@ -243,4 +260,16 @@ void cScene::IncTickCount()
 {
 	for (int i=0;i<SCENE_AREA*SCENE_AREA;i++)
 		TilesMap[i]->IncTickCount();
+}
+
+
+void cScene::SetAnimateTile(int cx,int cy){
+
+	int idx=cy*SCENE_AREA+cx;
+	TilesMap[idx]->setAnimated(true);
+	TilesMap[idx]->setNumSprites(5);
+	TilesMap[idx]->setActive(true);
+	TilesMap[idx]->setWalkeable(false);
+
+
 }

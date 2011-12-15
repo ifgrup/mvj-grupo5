@@ -1,4 +1,4 @@
-//hola
+
 #include "cInputLayer.h"
 #include "cMouse.h"
 #include "cKeyboard.h"

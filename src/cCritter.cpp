@@ -136,9 +136,11 @@ void cCritter::Move()
 		{
 			Trajectory.Done();
 			seq=0;
+			move=false;
 		}
 		else if(mov==CONTINUE)
 		{
+			move=true;
 		}
 	}
 	else
@@ -189,4 +191,14 @@ bool cCritter::GetShooting()
 bool cCritter::IsFiring()
 {
 	return (shoot_seq<8);
+}
+bool cCritter::IsMoving()
+{
+
+	return move;
+}
+
+bool cCritter::AlAtaquue(){
+
+return attack;
 }
