@@ -30,7 +30,7 @@ LRESULT CALLBACK WindowFunc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 bool InitWindow( HINSTANCE hInst, HWND *hWnd, bool *exclusive )
 {
 	WNDCLASSEX wcl;
-	char szWinName[] = "Game Engine Window";
+	char szWinName[] = "Arkham Escape";
 
 	wcl.cbSize = sizeof( WNDCLASSEX );
 	wcl.hInstance = hInst;

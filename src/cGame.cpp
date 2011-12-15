@@ -64,7 +64,7 @@ bool cGame::Loop()
 
 	//Input
 	res = LoopInput();
-	if(!res) return false;
+	//if(!res) return false;
 	
 	//Process
 	res = LoopProcess();
@@ -72,7 +72,7 @@ bool cGame::Loop()
 
 	//Output
 	res = LoopOutput();
-	if(!res) return false;
+	//if(!res) return false;
 	
 	//Update Scene //VMH:
 	UpdateScene();
@@ -259,7 +259,7 @@ void cGame::ProcessOrder()
 		{
 			Mouse->SetPointer(ATTACK);
 		}
-		else if(Mouse->In(s,SCENE_Yo,SCENE_Xf-s,SCENE_Yf-s))
+		else if(Mouse->In(s,SCENE_Yo+s,SCENE_Xf-s,SCENE_Yf-s))
 		{
 			//Critter selected pointing, where to move
 			if(Critter.GetSelected())	Mouse->SetPointer(MOVE);
@@ -290,16 +290,14 @@ void cGame::ProcessOrder()
 		}
 	}
 
-	if(Mouse->ButtonUp(RIGHT)){
-release_and_pressbr=true;
-
+	if(Mouse->ButtonUp(RIGHT))
+	{
+		release_and_pressbr=true;
 	}
-
-
+	
 	if(Mouse->ButtonDown(RIGHT) && (Critter.GetSelected()))
 	{
-		
-		Mouse->GetCell(&cmx, &cmy);
+			Mouse->GetCell(&cmx, &cmy);
 
 		if((Scene.IsCellActive(Scene.cx+cmx, Scene.cy+cmy))&&(Scene.IstWalkeableHero(Scene.cx+cmx, Scene.cy+cmy)))
 		{
@@ -307,11 +305,8 @@ release_and_pressbr=true;
 			if(release_and_pressbr)
 			{
 				Sound.Playeffects(1);
-release_and_pressbr=false;
+				release_and_pressbr=false;
 				Scene.SetAnimateTile(Scene.cx+cmx,Scene.cy+cmy);
-
-			
-
 			}
 		}
 	}
@@ -335,8 +330,5 @@ void cGame::UpdateEnemiesTarget(int cx, int cy)
 	{
 		listEnemies[i]->GoToCell(Scene.getTilesMap(),cx,cy); //En lugar de esto,llamar a función de cEnemy, por lectura de mapa tener puntos de control, y que
 		//de desplacen al punto de control más cercano respecto al tío no?....
-
-
 	}
-
 }

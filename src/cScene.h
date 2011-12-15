@@ -8,22 +8,22 @@
 
 //Visible part
 #define SCENE_WIDTH		25
-#define SCENE_HEIGHT	17
+#define SCENE_HEIGHT	15
 
 //Dimension = Area^2
 #define SCENE_AREA		32
 
 //Map coordinate beginning
 #define SCENE_Xo		0
-#define SCENE_Yo		55
+#define SCENE_Yo		0
 #define SCENE_Xf		( SCENE_Xo + (SCENE_WIDTH<<5)  )
 #define SCENE_Yf		( SCENE_Yo + (SCENE_HEIGHT<<5) )
 
 //Radar position (left,top)
 #define RADAR_Xo		336
-#define RADAR_Yo		5
+#define RADAR_Yo		465
 #define RADAR_Xf		464
-#define RADAR_Yf		133
+#define RADAR_Yf		592
 
 // LHA
 #define RADIO_VISIBLE   2
