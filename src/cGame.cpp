@@ -170,7 +170,7 @@ void cGame::ProcessOrder()
 	{
 		Mouse->SetPointer(NORMAL);
 		
-		if(Mouse->In(SCENE_Xo,SCENE_Yo,SCENE_Xf,SCENE_Yf))
+		if(Mouse->In(SCENE_Xo,SCENE_Yo,SCENE_Xf-s,SCENE_Yf))
 		{
 			if(Mouse->GetSelection()!=SELECT_SCENE)
 			{

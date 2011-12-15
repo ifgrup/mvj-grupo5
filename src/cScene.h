@@ -20,10 +20,10 @@
 #define SCENE_Yf		( SCENE_Yo + (SCENE_HEIGHT<<5) )
 
 //Radar position (left,top)
-#define RADAR_Xo		666
-#define RADAR_Yo		86
-#define RADAR_Xf		711
-#define RADAR_Yf		214
+#define RADAR_Xo		336
+#define RADAR_Yo		5
+#define RADAR_Xf		464
+#define RADAR_Yf		133
 
 // LHA
 #define RADIO_VISIBLE   2
