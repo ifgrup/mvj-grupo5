@@ -30,6 +30,9 @@ public:
 	bool GetSelected();
 	bool GetShooting();
 	bool IsFiring();
+	bool IsMoving();
+	bool AlAtaquue();
+	
 
 private:
 	int x,y;		//Position in total map
@@ -46,6 +49,7 @@ private:
 	bool shoot;		//Begin attack (to shoot)
 	int shoot_seq;	//Shooter sequence animation control
 	int shoot_delay;//Shooter animation delay
+	bool move;
 };
 
 #endif

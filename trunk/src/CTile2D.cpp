@@ -50,6 +50,11 @@ void CTile2D::setVisited(bool bVisited)
 	this->isVisited=bVisited;
 }
 
+void CTile2D::setWalkeable(bool bWalkeable)
+{
+	this->isWalkeable=bWalkeable;
+}
+
 void CTile2D::setAnimated(bool bAnimated)
 {
 	this->isAnimated=bAnimated;

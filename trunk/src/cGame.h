@@ -37,7 +37,7 @@ private:
 	void UpdateEnemiesTarget(int cx,int cy);
 	vlrSoundLayer Sound;//sound
 	int state;
-
+	bool SoundSistem();
 	void ProcessOrder();
 	bool Render();
 };

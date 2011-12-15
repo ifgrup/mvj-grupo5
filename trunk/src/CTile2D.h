@@ -39,7 +39,7 @@ public:
 	void setVisited(bool bVisible);
 	void setFogged (bool bFogged);
 	void setActive (bool bActive);
-
+	void setWalkeable(bool bWalkeable);
 	void setAnimated(bool bAnimated);
 	void IncTickCount();
 	void setNumSprites(int nSprites);

@@ -57,7 +57,8 @@ public:
 	void UpdateVisibleZone(int cx,int cy); //VMH: El prota está aquí. Cada vez que se mueva, si radio de acción debe ponerse como visible.
 	void IncTickCount(); //VMH actualiza el tick count para las celdas animadas.
 	bool IsFogged(int cellx,int celly); //VMH Oscura inicialmente, ya visitada
-
+	void MoveScroll(int x,int y);
+	void SetAnimateTile(int cx,int cy);
 private:
 	CTile2D  **TilesMap;  /*VMH mapa cpn la información de las casillas. Inicialmente sólo tenía el índice para acceder al bitmap.
 			     Ahora contiene más información, por eso utilizamos la estuctura InfoTile2D*/

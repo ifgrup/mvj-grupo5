@@ -32,7 +32,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	Sound.Init();
 	Sound.LoadData();
-	Sound.PlaySoundA(STATE_MAIN);
+	
 
 
 	//Enemies:
@@ -109,8 +109,7 @@ bool cGame::LoopProcess()
 							{
 								state = STATE_GAME;
 
-								//vlr sound
-								Sound.PlaySoundA(state);
+						
 
 							}
 							//Exit button
@@ -135,6 +134,7 @@ bool cGame::LoopOutput()
 {
 	bool res;
 	res = Render();
+		res=SoundSistem();
 	return res;
 }
 
@@ -144,7 +144,13 @@ bool cGame::Render()
 	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton,listEnemies);
 	return res;
 }
+bool cGame::SoundSistem(){
+	bool res;
+	res=Sound.PlaySoundA(state);
+	res=Sound.SoundEffectsUnit(&Critter);
+		return res;
 
+}
 void cGame::ProcessOrder()
 {
 	cMouse *Mouse;
@@ -153,6 +159,7 @@ void cGame::ProcessOrder()
 	int xo,xf,yo,yf;
 	int b4pointer;
 	static int release_and_press;
+	static int release_and_pressbr;
 	int cmx, cmy;
 
 	Mouse = Input.GetMouse();
@@ -283,16 +290,28 @@ void cGame::ProcessOrder()
 		}
 	}
 
+	if(Mouse->ButtonUp(RIGHT)){
+release_and_pressbr=true;
+
+	}
+
+
 	if(Mouse->ButtonDown(RIGHT) && (Critter.GetSelected()))
 	{
+		
 		Mouse->GetCell(&cmx, &cmy);
 
 		if((Scene.IsCellActive(Scene.cx+cmx, Scene.cy+cmy))&&(Scene.IstWalkeableHero(Scene.cx+cmx, Scene.cy+cmy)))
 		{
 			Mouse->SetPointer(ATTACK);
-			if(release_and_press)
+			if(release_and_pressbr)
 			{
 				Sound.Playeffects(1);
+release_and_pressbr=false;
+				Scene.SetAnimateTile(Scene.cx+cmx,Scene.cy+cmy);
+
+			
+
 			}
 		}
 	}
