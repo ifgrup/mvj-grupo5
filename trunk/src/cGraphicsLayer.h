@@ -13,6 +13,7 @@
 #include <D3DX9.h>
 #include "cScene.h"
 #include "cMouse.h"
+#include "cDialog.h"
 #include "cCritter.h"
 #include "cSkeleton.h"
 #include "cEnemy.h"
@@ -30,7 +31,7 @@ public:
 	
 	void LoadData();
 	void UnLoadData();
-	bool Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies);
+	bool Render(int state, cMouse *Mouse, cScene *Scene, cCritter *Critter, cSkeleton *Skeleton,cEnemy** Enemies, cDialog* pDialog);
 
 	bool DrawScene(cScene *Scene);
 	bool DrawRadar(cScene *Scene);
@@ -38,6 +39,9 @@ public:
 	bool DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies);
 	bool DrawMouse(cMouse *Mouse);
 	bool DrawRect(RECT rc, D3DCOLOR color);
+
+	bool DrawDialog(cDialog* pDialog);
+	bool DrawDialogBackground(cDialog* pDialog);
 
 private:
 
@@ -49,6 +53,9 @@ private:
 	LPDIRECT3DTEXTURE9 texTiles,texCharacters,texMouse;
 	LPDIRECT3DTEXTURE9 texFog;
 	LPDIRECT3DTEXTURE9 texVisited;
+	LPDIRECT3DTEXTURE9 texDialog;
+
+	LPD3DXFONT font;
 };
 
 

@@ -7,6 +7,9 @@
 #include "cScene.h"
 #include "vlrSoundLayer.h"//sound
 #include "cEnemy.h"
+#include "cDialog.h"
+
+
 #define STATE_MAIN	0
 #define STATE_GAME	1
 
@@ -30,9 +33,13 @@ private:
 	cGraphicsLayer Graphics;
 	cInputLayer Input;
 	cScene Scene;
+	cDialog *pDialog;
+	
 	cCritter Critter;
 	cSkeleton Skeleton;
 	cEnemy** listEnemies; //array of enemies
+
+
 	short num_enemies;//num of enemies
 	void UpdateEnemiesTarget(int cx,int cy);
 	vlrSoundLayer Sound;//sound

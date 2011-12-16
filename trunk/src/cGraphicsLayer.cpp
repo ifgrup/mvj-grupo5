@@ -10,6 +10,7 @@ cGraphicsLayer::cGraphicsLayer()
 	g_pD3D = NULL;
 	g_pD3DDevice = NULL;
 	g_pSprite = NULL;
+	font = NULL;
 }
 
 cGraphicsLayer::~cGraphicsLayer(){}
@@ -66,6 +67,11 @@ bool cGraphicsLayer::Init(HWND hWnd)
 		return false;
 	}
 
+	hr = D3DXCreateFont(g_pD3DDevice, 18, 0, FW_BOLD, 0, FALSE, 
+			DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, 
+			DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), 
+			&font );
+
 	return true;
 }
 
@@ -115,6 +121,10 @@ void cGraphicsLayer::LoadData()
 	D3DXCreateTextureFromFileEx(g_pD3DDevice, "niebla2.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0xffffffff,NULL,NULL,&texVisited);
+	//Dialogs
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "Dialogs.png",0,0,1,0,D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
+								0xffffffff,NULL,NULL,&texDialog);
 }
 
 void cGraphicsLayer::UnLoadData()
@@ -154,6 +164,11 @@ void cGraphicsLayer::UnLoadData()
 		texVisited->Release();
 		texVisited = NULL;
 	}
+	if(texDialog)
+	{
+		texDialog->Release();
+		texDialog = NULL;
+	}
 	if(g_pSprite)
 	{
 		g_pSprite->Release();
@@ -161,12 +176,11 @@ void cGraphicsLayer::UnLoadData()
 	}
 }
 
-bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies)
+bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies, cDialog* pDialog)
 {
 	//HRESULT Draw( LPDIRECT3DTEXTURE9 pTexture, CONST RECT *pSrcRect,
 	//				CONST D3DXVECTOR3 *pCenter,  CONST D3DXVECTOR3 *pPosition,
 	//				D3DCOLOR Color);
-
 	g_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, 0xFF000000, 0, 0 );
 	g_pD3DDevice->BeginScene();
 
@@ -183,14 +197,37 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 								DrawScene(Scene);
 								DrawUnits(Scene,Critter,Skeleton,Enemies);
 								DrawVisibility(Scene, Critter);
-								//Graphic User Interface
+
 								g_pSprite->Draw(texGame,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
 								DrawRadar(Scene);
+								
+								if(pDialog->getState() == DIALOG_STATE_SHOW)
+								{
+									//DrawDialogBackground(pDialog);
+									DrawDialog(pDialog);
+								}
 								break;
 			}
 
 		g_pSprite->End();
+		
+		//--- INFO ---
+		if(state==STATE_GAME)
+		{
+			if(pDialog->getState() == DIALOG_STATE_SHOW)
+			{
+		RECT rc;
+		int x, y, xf, yf;
 
+		pDialog->getPos(&x, &y);
+		pDialog->getSize(&xf, &yf);
+		xf+=x;
+		yf+=y;
+
+		SetRect( &rc, x+40, y+40, 50, 400 );
+		font->DrawText(	NULL, pDialog->getText(), -1, &rc, DT_NOCLIP, D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f ) );
+			}
+		}
 		DrawMouse(Mouse);
 
 	g_pD3DDevice->EndScene();
@@ -525,5 +562,85 @@ bool cGraphicsLayer::DrawRect(RECT rc, D3DCOLOR color)
 	SetRect(&rect,xf,yo,xf+1,yf+1);
 	g_pD3DDevice->Clear(1,(D3DRECT *)&rect,D3DCLEAR_TARGET,color,1.0f,0);
 	
+	return true;
+}
+
+bool cGraphicsLayer::DrawDialogBackground(cDialog* pDialog)
+{
+	RECT r;
+	int x, y, xf, yf;
+	int xfin, yfin;
+	pDialog->getPos(&x, &y);
+	pDialog->getSize(&xf, &yf);
+	xfin = xf;
+	yfin = yf;
+	xf+=x;
+	yf+=y;
+
+	// Draw the background
+	SetRect(&r, DIALOG_IMG_BKG_X, DIALOG_IMG_BKG_Y, DIALOG_IMG_BKG_X + 2, DIALOG_IMG_BKG_Y + 2);
+/*	for(int i = (x - DIALOG_BOX_OFFSET); i < (xf + DIALOG_BOX_OFFSET); i++)
+	{
+		for(int j = (y - DIALOG_BOX_OFFSET); j < (yf + DIALOG_BOX_OFFSET); j++)
+		{*/
+			g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)x, (float)y, 0.0f), 0xFFFFFFFF);
+		/*}
+	}*/
+
+	return true;
+}
+
+bool cGraphicsLayer::DrawDialog(cDialog* pDialog)
+{
+	RECT r;
+	int x, y, xf, yf;
+	int xfin, yfin;
+	int xb, yb;
+
+	pDialog->getPos(&x, &y);
+	pDialog->getSize(&xf, &yf);
+	xfin = xf;
+	yfin = yf;
+	xf+=x;
+	yf+=y;
+
+	// Draw the upper left corner
+	SetRect(&r, DIALOG_IMG_UL_X, DIALOG_IMG_UL_Y, DIALOG_IMG_UL_X + DIALOG_IMG_SIZE, DIALOG_IMG_UL_Y + DIALOG_IMG_SIZE);
+	g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)x, (float)y, 0.0f), 0xFFFFFFFF);
+
+	// Draw the upper right corner
+	SetRect(&r, DIALOG_IMG_UR_X, DIALOG_IMG_UR_Y, DIALOG_IMG_UR_X + DIALOG_IMG_SIZE, DIALOG_IMG_UR_Y + DIALOG_IMG_SIZE);
+	g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)xf, (float)y, 0.0f), 0xFFFFFFFF);
+
+	// Draw the bottom left corner
+	SetRect(&r, DIALOG_IMG_BL_X, DIALOG_IMG_BL_Y, DIALOG_IMG_BL_X + DIALOG_IMG_SIZE, DIALOG_IMG_BL_Y + DIALOG_IMG_SIZE);
+	g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)x, (float)yf, 0.0f), 0xFFFFFFFF);
+
+	// Draw the bottom right corner
+	SetRect(&r, DIALOG_IMG_BR_X, DIALOG_IMG_BR_Y, DIALOG_IMG_BR_X + DIALOG_IMG_SIZE, DIALOG_IMG_BR_Y + DIALOG_IMG_SIZE);
+	g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)xf, (float)yf, 0.0f), 0xFFFFFFFF);
+
+	// Draw the horizontal lines
+	SetRect(&r, DIALOG_IMG_HOR_X, DIALOG_IMG_HOR_Y, DIALOG_IMG_HOR_X + 1, DIALOG_IMG_HOR_Y + DIALOG_IMG_HOR_SIZE);
+	for(int i = 0; i < xfin - DIALOG_IMG_SIZE; i++)
+	{
+		g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)(x+DIALOG_IMG_SIZE+i), (float)y+9, 0.0f), 0xFFFFFFFF);
+		g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)(x+DIALOG_IMG_SIZE+i), (float)yf+27, 0.0f), 0xFFFFFFFF);
+	}
+
+	// Draw the vertical lines
+	SetRect(&r, DIALOG_IMG_VERT_X, DIALOG_IMG_VERT_Y, DIALOG_IMG_VERT_X + DIALOG_IMG_VERT_SIZE, DIALOG_IMG_VERT_Y + 1);
+	for(int i = 0; i < yfin - DIALOG_IMG_SIZE; i++)
+	{
+		g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)x+9, (float)y+DIALOG_IMG_SIZE+i, 0.0f), 0xFFFFFFFF);
+		g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)xf+31, (float)y+DIALOG_IMG_SIZE+i, 0.0f), 0xFFFFFFFF);
+	}
+
+
+	pDialog->getButtonPos(&xb, &yb);
+	SetRect(&r, 0,0,100,32);
+	g_pSprite->Draw(texTiles, &r, NULL, &D3DXVECTOR3((float)xb, (float)yb, 0.0f), 0xFFFFFFFF);
+
+
 	return true;
 }
