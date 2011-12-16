@@ -33,7 +33,12 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	Sound.Init();
 	Sound.LoadData();
 	
-
+	pDialog = new cDialog();
+	pDialog->setPos(200, 100);
+	pDialog->setSize(400, 300);
+	pDialog->setButtonPos(180, 290);
+	pDialog->setText("Esto es una prueba que mola que te cagas por las\nbragas");
+	pDialog->Show();
 
 	//Enemies:
 	this->num_enemies=4;
@@ -102,30 +107,43 @@ bool cGame::LoopProcess()
 	switch(state)
 	{
 		case STATE_MAIN:
-						if(Mouse->ButtonDown(LEFT))
-						{
-							//Play button
-							if(Mouse->In(156,488,335,522))
-							{
-								state = STATE_GAME;
-
-						
-
-							}
-							//Exit button
-							else if(Mouse->In(463,488,642,522))
-							{
-								return false;
-							}
-						}
-						break;
-
+		{
+			if(Mouse->ButtonDown(LEFT))
+			{
+				//Play button
+				if(Mouse->In(156,488,335,522))
+				{
+					state = STATE_GAME;
+				}
+				//Exit button
+				else if(Mouse->In(463,488,642,522))
+				{
+					return false;
+				}
+			}
+			break;
+		}
 		case STATE_GAME:
-						ProcessOrder();
-						Critter.Move();
-						for (int i=0;i<num_enemies;i++)
-							listEnemies[i]->Move();
-						break;
+		{
+			if(pDialog->getState() == DIALOG_STATE_SHOW)
+			{
+				int x, y;
+				pDialog->getButtonPos(&x, &y);
+				if(Mouse->In(x, y, x+100, y+32))
+				{
+					if(Mouse->ButtonDown(LEFT))
+						pDialog->OnButtonPressed();
+				}
+			}
+			else
+			{
+				ProcessOrder();
+				Critter.Move();
+				for (int i=0;i<num_enemies;i++)
+					listEnemies[i]->Move();
+			}
+			break;
+		}
 	}
 	return true;
 }
@@ -141,16 +159,19 @@ bool cGame::LoopOutput()
 bool cGame::Render()
 {
 	bool res;
-	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton,listEnemies);
+	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton,listEnemies, pDialog);
 	return res;
 }
-bool cGame::SoundSistem(){
+
+bool cGame::SoundSistem()
+{
 	bool res;
 	res=Sound.PlaySoundA(state);
 	res=Sound.SoundEffectsUnit(&Critter);
 		return res;
 
 }
+
 void cGame::ProcessOrder()
 {
 	cMouse *Mouse;
