@@ -9,21 +9,26 @@
 #include "cWalkabilityFunctorFlalling.h"
 #include "cStrategyFunctor.h"
 #include "cStrategyPatrol.h"
+#include "cStrategyFolouDeCritter.h"
 
-#define ENEMY_DETECT_ZONE 4
 
 typedef enum WalkingTypes{
 	FLALLING=1,
-	PATROL=2,
-	SQUADRON=3
+	FLISKINS=2,
+	GRIJANDER=3
 }WalkingTypes;
+
+typedef enum StrategyTypes{
+	PATROL=1,
+	FOLOU=2
+}StrategyTypes;
 
 
 class cEnemy
 {
 public:
-	cEnemy(void);
-	cEnemy(WalkingTypes walkabilityType); //en función del tipo de walkability, crea el Functor correspondiente
+
+	cEnemy(int cx,int cy,WalkingTypes walkabilityType,StrategyTypes stype); //en función del tipo de walkability, crea el Functor correspondiente
 	cWalkabilityFunctor* pWalkabilityFunctor;
 	cStrategyFunctor* pStrategyFunctor;
 
@@ -40,19 +45,24 @@ public:
 	void GetPosition(int *posx,int *posy);
 	void SetCell(int cellx,int celly);
 	void GetCell(int *cellx,int *celly);
-
+	bool GetDestinyCell(int* cx, int* cy); //Devuelve el destino actual de la trayectoria del bicho
+	
+	
 	bool HasDetectedPlayer(int x, int y);
+	bool NextTarget(int CritterX, int CritterY,int* newx,int* newy);
 
 private:
 	int x,y;		//Position in total map
 	int cx,cy;		//Cell position in total map
-
+	int cxHome,cyHome; //Posiciones iniciales del enemigo, a las que vuelve cuando contacta con el critter.
 	cPath* Trajectory; //Dinamic, with it's own walkeable function
+	int seq;		//Sequence animation control
+	int delay;		//Animation delay
+
 public:
 	static bool IsThisTileWalkeableForMe(CTile2D*);
 	void GetNextTarget(int* newcx,int*newcy);
-	int seq;		//Sequence animation control
-	int delay;		//Animation delay
+	void GoHome(); //vuelve a la posición inicial
 
 };
 

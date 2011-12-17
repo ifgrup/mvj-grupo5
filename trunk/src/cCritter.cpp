@@ -206,3 +206,15 @@ bool cCritter::AlAtaquue(){
 
 return attack;
 }
+
+void cCritter::Damage()
+{
+	//restará vida, y si es cero, muerto
+   
+}
+
+bool cCritter::IsAlive()
+{  //devuelve si está vivo o no el critter
+   //	return vida!=0;
+  return true;
+}

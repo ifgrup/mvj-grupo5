@@ -66,6 +66,21 @@
     <ClCompile Include="cDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cStrategyFunctor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cStrategyPatrol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cWalkabilityFunctor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cWalkabilityFunctorFlalling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cStrategyFolouDeCritter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cAStar.h">
@@ -114,6 +129,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cStrategyFunctor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cStrategyPatrol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cWalkabilityFunctor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cWalkabilityFunctorFlalling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cStrategyFolouDeCritter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

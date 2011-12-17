@@ -4,6 +4,8 @@
 cGame::cGame() {}
 cGame::~cGame(){}
 
+#define N_EFECTOS_PANTALLA 4
+
 bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 {
 	bool res;
@@ -41,17 +43,8 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	pDialog->Show();
 
 	//Enemies:
-	this->num_enemies=4;
-	this->listEnemies=(cEnemy**)new cEnemy*[num_enemies];
-	for (int i=0;i<num_enemies;i++)
-	{
-		listEnemies[i]=new cEnemy(FLALLING);
-		int f=rand()%SCENE_AREA;
-		int c=rand()%SCENE_AREA;
-		listEnemies[i]->SetCell(f,c);
-		listEnemies[i]->SetPosition(f*32,c*32);
+	LoadEnemies();
 
-	}
 	return true;
 }
 
@@ -135,24 +128,9 @@ bool cGame::LoopProcess()
 			else
 			{
 				Critter.Move();
-				int x, y;
-
-				Critter.GetCell(&x, &y);
-				for (int i=0;i<num_enemies;i++)
-				{
-					if(listEnemies[i]->HasDetectedPlayer(x, y))
-					{
-						char asd[256];
-						sprintf(asd, "Soy el bicho %d y te he detectao!", i);
-						pDialog->setText(asd);
-						pDialog->Show();
-					}
-					else
-					{
-						listEnemies[i]->Move();
-					}
-				}
-			
+				ActualizarIA();
+		
+				
 				//Update Scene //VMH:
 				ProcessOrder();
 				UpdateScene();
@@ -228,9 +206,6 @@ void cGame::ProcessOrder()
 						{
 							Mouse->GetCell(&cx,&cy);
 							Critter.GoToCell(Scene.getTilesMap(),Scene.cx+cx,Scene.cy+cy);
-
-							//VMH2:Update Enemies strategy
-							UpdateEnemiesTarget(Scene.cx+cx,Scene.cy+cy);
 						}
 					}
 				}
@@ -368,4 +343,85 @@ void cGame::UpdateEnemiesTarget(int cx, int cy)
 		listEnemies[i]->GoToCell(Scene.getTilesMap(),cx,cy); //En lugar de esto,llamar a función de cEnemy, por lectura de mapa tener puntos de control, y que
 		//de desplacen al punto de control más cercano respecto al tío no?....
 	}
+}
+
+void cGame::EfectoPantalla(int idEfecto)
+{   
+	switch(idEfecto)
+	{
+		case 1:
+			this->Graphics.EfectoTilt();
+			break;
+	}
+}
+
+
+void cGame::ActualizarIA()
+{
+
+	for (int i=0;i<num_enemies;i++)
+	{
+		int ecx,ecy;//celdas del enemigo
+		int ccx,ccy;//celdas del critter
+		cEnemy* bicho=listEnemies[i];
+
+		bicho->GetCell(&ecx,&ecy);
+		Critter.GetCell(&ccx,&ccy);
+
+		bool bMapaRecargado=false;
+
+		//Reevaluamos estrategia
+		int nuevax=-7,nuevay=-7;
+		bool nuevo_destino=bicho->NextTarget(ccx, ccy,&nuevax,&nuevay);
+		if(nuevo_destino)
+			bicho->GoToCell(Scene.getTilesMap(),nuevax,nuevay);
+
+
+		//Actualizamos Mapas, le decimos que vaya a la celda a la que actualmente ya está yendo, pero recargando mapa para reevaluar walkability
+		int destx,desty;
+		if (!nuevo_destino && bicho->GetDestinyCell(&destx,&desty))
+			bicho->GoToCell(Scene.getTilesMap(),destx,desty);
+		
+
+		//Control de colisión
+		if (ecx==ccx && ecy==ccy)
+		{
+			listEnemies[i]->GoHome(); //vuelve a su posición inicial
+			Critter.Damage(); //Hacer daño al critter
+			int i=rand()%N_EFECTOS_PANTALLA;
+			EfectoPantalla(1);
+			Sound.Playeffects(3);
+		}
+
+		{
+			//Se puede mover? sólo si no hay fuego/hielo
+			if(!Scene.IsCellFired(ecx,ecy)) //si está en fuego/hielo, se queda parao
+				listEnemies[i]->Move();
+		}
+
+	}//for enemies
+			
+
+}
+
+void cGame::LoadEnemies()
+{
+	
+	//VMH: Reservamos memoria para el resto de info del mapa, sólo para los punteros, el contenido se creará dinámicamente
+	
+	FILE *f;
+	f=fopen("enemies.txt","r");
+	int nenemigos=0;
+    fscanf(f,"%d",&nenemigos);
+	this->num_enemies=nenemigos;
+	this->listEnemies=(cEnemy**)new cEnemy*[num_enemies];
+
+	for (int i=0;i<nenemigos;i++)
+	{
+		int cx,cy,wtipo,stipo;
+	    fscanf(f,"%d %d %d %d\n",&cx,&cy,&wtipo,&stipo);
+		listEnemies[i]=new cEnemy(cx,cy,(WalkingTypes)wtipo,(StrategyTypes)stipo);
+	}
+
+	fclose(f);
 }

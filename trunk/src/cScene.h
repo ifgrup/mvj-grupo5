@@ -26,9 +26,10 @@
 #define RADAR_Yf		592
 
 // LHA
-#define RADIO_VISIBLE   6
+#define RADIO_VISIBLE   10
 
-#include "CTile2D.h" //VMH
+#include "CTile2D.h" 
+
 class cScene
 {
 
@@ -45,6 +46,7 @@ public:
 	bool IsCellVisited(int cellx, int celly); //LHA
 	bool IsCellActive(int cellx, int celly);
 	bool IsVisible(int cellx, int celly); // LHA
+	bool IsCellFired(int cx,int cy);
 	bool IsWalkeableHero(int cellx, int celly);
 	void ResetVisible();
 	CTile2D** getTilesMap() { return TilesMap; }

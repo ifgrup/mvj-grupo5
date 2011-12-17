@@ -285,3 +285,10 @@ void cScene::SetFireTile(int cx,int cy)
 	TilesMap[idx]->setActive(true); //ask lha
 	TilesMap[idx]->setFired(true);
 }
+
+bool cScene::IsCellFired(int cx,int cy)
+{
+	int idx=cy*SCENE_AREA+cx;
+	return TilesMap[idx]->IsFired();
+	
+}

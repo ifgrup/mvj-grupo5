@@ -42,6 +42,7 @@ public:
 
 	bool DrawDialog(cDialog* pDialog);
 	bool DrawDialogBackground(cDialog* pDialog);
+	void EfectoTilt();
 
 private:
 
@@ -56,6 +57,8 @@ private:
 	LPDIRECT3DTEXTURE9 texDialog;
 
 	LPD3DXFONT font;
+	int ticsTilt;
+
 };
 
 
