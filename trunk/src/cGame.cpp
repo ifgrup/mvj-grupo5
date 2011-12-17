@@ -79,9 +79,6 @@ bool cGame::Loop()
 	res = LoopOutput();
 	//if(!res) return false;
 	
-	//Update Scene //VMH:
-	UpdateScene();
-	
 	return true;
 }
 
@@ -137,10 +134,28 @@ bool cGame::LoopProcess()
 			}
 			else
 			{
-				ProcessOrder();
 				Critter.Move();
+				int x, y;
+
+				Critter.GetCell(&x, &y);
 				for (int i=0;i<num_enemies;i++)
-					listEnemies[i]->Move();
+				{
+					if(listEnemies[i]->HasDetectedPlayer(x, y))
+					{
+						char asd[256];
+						sprintf(asd, "Soy el bicho %d y te he detectao!", i);
+						pDialog->setText(asd);
+						pDialog->Show();
+					}
+					else
+					{
+						listEnemies[i]->Move();
+					}
+				}
+			
+				//Update Scene //VMH:
+				ProcessOrder();
+				UpdateScene();
 			}
 			break;
 		}

@@ -26,7 +26,7 @@
 #define RADAR_Yf		592
 
 // LHA
-#define RADIO_VISIBLE   2
+#define RADIO_VISIBLE   6
 
 #include "CTile2D.h" //VMH
 class cScene
