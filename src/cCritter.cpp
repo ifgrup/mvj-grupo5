@@ -1,7 +1,6 @@
 
 #include "cCritter.h"
-#include "cTrajectory.h"
-#include "cScene.h"
+
 
 cCritter::cCritter()
 {
@@ -16,6 +15,11 @@ cCritter::cCritter()
 	shoot=false;
 	shoot_seq=0;
 	shoot_delay=0;
+	//Creamos la trayectoria, y el WalkabilityFunctor por defecto
+	cWalkabilityFunctor* pWalk=new cWalkabilityFunctor();
+
+	this->Trajectory=new cPath(pWalk);
+
 }
 cCritter::~cCritter()
 {
@@ -34,7 +38,7 @@ void cCritter::GetRect(RECT *rc,int *posx,int *posy,cScene *Scene)
 	/*VMH Y luego, en función de para dónde miramos, y la secuencia en la animación, devolvemos el rectángulo dentro del bitmap que representa el gráfico
 	actual a pintar del bichejo*/
 
-	switch(Trajectory.Faced())
+	switch(Trajectory->Faced())
 	{
 		case STOP:	SetRect(rc,256,0,288,32);						break;
 
@@ -49,7 +53,7 @@ void cCritter::GetRect(RECT *rc,int *posx,int *posy,cScene *Scene)
 	}
 
 	/*VMH Si sigue moviéndose, esperamos 4 tics para que no vaya muy rápido, y aumentamos el índice que marca la secuencia de animación del bichejo*/
-	if(!Trajectory.IsDone())
+	if(!Trajectory->IsDone())
 	{
 		delay++;
 		if(delay>=4)
@@ -112,8 +116,8 @@ void cCritter::GoToCell(CTile2D **map,int destcx,int destcy)
 	shoot=false;
 
 	// Go
-	if(Trajectory.IsDone())	Trajectory.Make(map,cx,cy,destcx,destcy);
-	else					Trajectory.ReMake(map,destcx,destcy);
+	if(Trajectory->IsDone())	Trajectory->Make(map,cx,cy,destcx,destcy);
+	else					Trajectory->ReMake(map,destcx,destcy);
 }
 
 void cCritter::GoToEnemy(CTile2D **map,int destcx,int destcy)
@@ -128,13 +132,13 @@ void cCritter::Move()
 {
 	int mov;
 
-	if(!Trajectory.IsDone())
+	if(!Trajectory->IsDone())
 	{
-		mov=Trajectory.NextStep(&x,&y,&cx,&cy);
+		mov=Trajectory->NextStep(&x,&y,&cx,&cy);
 
 		if(mov==ARRIVE)
 		{
-			Trajectory.Done();
+			Trajectory->Done();
 			seq=0;
 			move=false;
 		}

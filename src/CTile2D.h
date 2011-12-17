@@ -3,6 +3,9 @@
 
 #include <windows.h>
 
+
+#define TICS_OF_FIRE 300 //tics de duración de la animación de fuego de una tile
+
 class CTile2D
 {
 private:
@@ -20,6 +23,7 @@ private:
 	int  nSpritesAnimation; //Si es animada, cuántos sprites tiene la animación
 	int  nTicsAnimation; //Num de tics que lleva la imagen actual de la animación. Utilizado para el delay
 	bool isActive; //Indica si la tile está dentro de la zona "activa" del jugador
+	bool isFired;
 	
 public:
 	CTile2D(int n);
@@ -43,6 +47,8 @@ public:
 	void setAnimated(bool bAnimated);
 	void IncTickCount();
 	void setNumSprites(int nSprites);
+	void setFired (bool);
+	bool IsFired();
 
 };
 

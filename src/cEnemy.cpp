@@ -1,17 +1,49 @@
 #include "cEnemy.h"
 
-cEnemy::cEnemy()
+
+
+cEnemy::cEnemy(WalkingTypes wtype) //en función del tipo de walkability, crea el Functor correspondiente
 {
+	
 	SetPosition(8*32,1*32);
 	SetCell(8,1);
 
-
 	seq=0;
 	delay=0;
+	
+	switch (wtype)
+	{
+	
+		case FLALLING:
+			pWalkabilityFunctor=new cWalkabilityFunctorFlalling();
+			break;
+	
+		case PATROL:
+			pWalkabilityFunctor=NULL;
+			break;
+	
+		case SQUADRON:
+			pWalkabilityFunctor=NULL;
+			break;
+	}
 
-	//CPath must be created, with it's own walkability function
+	this->Trajectory=new cPath(pWalkabilityFunctor);
+}
 
-	this->Trajectory=new cPath(&(cEnemy::IsThisTileWalkeableForMe));
+
+cEnemy::cEnemy()
+{
+	//SetPosition(8*32,1*32);
+	//SetCell(8,1);
+
+
+	//seq=0;
+	//delay=0;
+
+	////CPath must be created, with it's own walkability function
+	////this->Trajectory=new cPath(&(cEnemy::IsThisTileWalkeableForMe));
+	//this->Trajectory=new cPath(pWalkabilityFunctor);
+	//
 }
 cEnemy::~cEnemy()
 {
@@ -147,3 +179,4 @@ void cEnemy::GetNextTarget(int* newcx,int*newcy)
 	*newcx=15;
 	*newcy=18;
 }
+

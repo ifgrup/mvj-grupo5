@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-cPath::cPath(pFnCheckWalkeable pFuncion) //VMH. Pasamos un puntero a función que nos dirá si una celda es walkeable o no. de esta forma, podemos hacer diferentes
+cPath::cPath(cWalkabilityFunctor* pWalkFunctor) //VMH. Pasamos un puntero al objeto de WalkabilityFunctor, con el métodoque nos dirá si una celda es walkeable o no. de esta forma, podemos hacer diferentes
 											// comportamientos para diferentes personajes
 {
 	AStar = NULL;
@@ -15,7 +15,7 @@ cPath::cPath(pFnCheckWalkeable pFuncion) //VMH. Pasamos un puntero a función que
 	nyf=-1;
 
 	this->isWalkVariable=0; /*VMH by default, false*/
-	this->pFuncionCheckWalkeable=pFuncion; //VMH
+	this->pWalkabilityFunctor=pWalkFunctor; //VMH
 
 }
 
@@ -32,7 +32,7 @@ void cPath::Make(CTile2D** map,int cx,int cy,int cxdest,int cydest)
 		world=map;
 		AStar=new cAStar();
 		AStar->InitializePathfinder();
-		AStar->LoadMap(world,pFuncionCheckWalkeable); //VMH;
+		AStar->LoadMap(world,pWalkabilityFunctor); //VMH;
 		status=AStar->FindPath(1,cx,cy,cxdest,cydest);
 
 		//Exists path?

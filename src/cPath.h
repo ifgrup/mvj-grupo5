@@ -4,6 +4,7 @@
 
 #include "cAStar.h"
 #include "CTile2D.h" //VMH
+#include "cWalkabilityFunctor.h"
 
 //Direction
 #define N		1
@@ -30,7 +31,7 @@ class cPath
 public:
 	//cPath(bool (*fnCheckWalkeable)(int idTile)=NULL);
 
-	cPath (pFnCheckWalkeable p=NULL);
+	cPath (cWalkabilityFunctor* p=NULL);
 
 	virtual ~cPath();
 
@@ -55,7 +56,7 @@ private:
 
 	bool  isWalkVariable; /*VMH Indicates if walkeability can be changed.By default, =0 */
 	CTile2D* pCopyOfMap; /*VMH copy for the case of variable walkability*/
-	pFnCheckWalkeable pFuncionCheckWalkeable; //VMH
+	cWalkabilityFunctor* pWalkabilityFunctor; //VMH
 
 
 };

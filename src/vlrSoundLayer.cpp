@@ -28,27 +28,21 @@ vlrSoundLayer::~vlrSoundLayer(){}
 bool vlrSoundLayer::Init()
 {
 	cLog *Log = cLog::Instance();
-	HRESULT hr;
-	
-  
-   
-    int               key;
-    unsigned int      version;
 
-
-	
-result = FMOD::System_Create(&system);
-result= system->setOutput(FMOD_OUTPUTTYPE_AUTODETECT);
-result =  system->init(32, FMOD_INIT_NORMAL, 0);
-
+	result = FMOD::System_Create(&system);
+	result= system->setOutput(FMOD_OUTPUTTYPE_AUTODETECT);
+	result =  system->init(32, FMOD_INIT_NORMAL, 0);
 	return true;
 }
 
-void ERRCHECK(FMOD_RESULT result)
+void vlrSoundLayer::ERRCHECK(FMOD_RESULT result)
 {
     if (result != FMOD_OK)
     {
-        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		char kk[256];
+		sprintf(kk,"FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+		cLog::Instance()->Msg(kk);
+		
         exit(-1);
     }
 }
@@ -57,16 +51,16 @@ void ERRCHECK(FMOD_RESULT result)
 void vlrSoundLayer::Finalize()
 {
 	
-	 result = sound1->release();
-   // ERRCHECK(result);
-   result = sound2->release();
-    //ERRCHECK(result);
+	result = sound1->release();
+    ERRCHECK(result);
+    result = sound2->release();
+    ERRCHECK(result);
     result = sound3->release();
-   // ERRCHECK(result);
+    ERRCHECK(result);
     result = system->close();
-   // ERRCHECK(result);
+    ERRCHECK(result);
     result = system->release();
-   // ERRCHECK(result);
+    ERRCHECK(result);
 	
     
 }

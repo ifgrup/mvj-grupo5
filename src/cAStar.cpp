@@ -63,7 +63,7 @@ void cAStar::InitializePathfinder()
 // Name: LoadMap
 // Desc: Read map with walkable and unwalkable cells
 //-----------------------------------------------------------------------------
-void cAStar::LoadMap(CTile2D** map,pFnCheckWalkeable pFuncionWalkeable) //VMH añadido el parámetro
+void cAStar::LoadMap(CTile2D** map,cWalkabilityFunctor* pWalkFunctor) //VMH añadido el parámetro
 {
 	int i,j,k;
 
@@ -74,7 +74,7 @@ void cAStar::LoadMap(CTile2D** map,pFnCheckWalkeable pFuncionWalkeable) //VMH añ
 		{
 			//char traza[100];sprintf(traza,"Load Map i%d j%d  k%d\n",i,j,k);
 			//cLog::Instance()->Msg(traza);
-		 	walkability[i][j]=pFuncionWalkeable!=NULL ? pFuncionWalkeable(map[k]) : map[k]->getId()==0; //VMH: Aquí, en función del tipo de personaje, el valor será cero o lo que sea!!!
+		 	walkability[i][j]=pWalkFunctor->IsThisTileWalkableForMe(map[k]); //VMH: Aquí, en función del tipo de personaje, el valor será cero o lo que sea!!!
 		    //sprintf(traza,"Walkeable %d\n",walkability[i][j]);
 			//cLog::Instance()->Msg(traza);
 			k++;

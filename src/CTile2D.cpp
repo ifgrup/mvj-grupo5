@@ -11,6 +11,7 @@ CTile2D::CTile2D(int n)
 	this->seqAnimation=0;
 	this->nTicsAnimation=0;
 	this->isFogged=false;
+	this->isFired=false;
 }
 
 CTile2D::~CTile2D(void)
@@ -68,17 +69,31 @@ void CTile2D::setActive(bool bActive)
 void CTile2D::IncTickCount()
 {
   //Updates counter of all animated tiles, in order to change it animation sequence
-	char kk[100];
-	sprintf(kk,"TickCount %d %d\n",nTicsAnimation,seqAnimation);
-	//cLog::Instance()->Msg(kk);
+
+
+	if (!isAnimated)
+		return;
 
 	this->nTicsAnimation++;
-	if (nTicsAnimation>10) //Hacer un #define majo
+	if (nTicsAnimation%10==0) //Hacer un #define majo
 	{
-		nTicsAnimation=0;
 	    seqAnimation=(seqAnimation+1)%nSpritesAnimation;
-		
+		//char kk[100];
+		//sprintf(kk,"TickCount %d %d\n",nTicsAnimation,isFired);
+		//cLog::Instance()->Msg(kk);
 	}
+
+	//Control de la animación de fuego
+	if (this->isFired && nTicsAnimation>=TICS_OF_FIRE)
+	{//Apagamos el fuego,dejamos el tile chamuscao, y lo ponemos como walkeable
+		this->idTile=4; //Tile chamuscada
+		this->isWalkeable=true;
+		this->isAnimated=false;
+		this->isFired=false;
+		this->isActive=true;
+		nTicsAnimation=0;
+	}
+	
   
 }
 
@@ -90,4 +105,14 @@ void CTile2D::setNumSprites(int nSprites)
 void CTile2D::setFogged(bool bFogged)
 {
 	this->isFogged=bFogged;
+}
+
+void CTile2D::setFired(bool bVisible)
+{
+	isFired=bVisible;
+}
+
+bool CTile2D::IsFired()
+{
+	return isFired;
 }

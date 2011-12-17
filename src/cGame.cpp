@@ -45,7 +45,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	this->listEnemies=(cEnemy**)new cEnemy*[num_enemies];
 	for (int i=0;i<num_enemies;i++)
 	{
-		listEnemies[i]=new cEnemy();
+		listEnemies[i]=new cEnemy(FLALLING);
 		int f=rand()%SCENE_AREA;
 		int c=rand()%SCENE_AREA;
 		listEnemies[i]->SetCell(f,c);
@@ -316,18 +316,19 @@ void cGame::ProcessOrder()
 		release_and_pressbr=true;
 	}
 	
-	if(Mouse->ButtonDown(RIGHT) && (Critter.GetSelected()))
+	if(Mouse->ButtonDown(RIGHT) && (Critter.GetSelected())) //TILE ARDIENDO
 	{
-			Mouse->GetCell(&cmx, &cmy);
+		Mouse->GetCell(&cmx, &cmy);
 
-		if((Scene.IsCellActive(Scene.cx+cmx, Scene.cy+cmy))&&(Scene.IstWalkeableHero(Scene.cx+cmx, Scene.cy+cmy)))
+		if((Scene.IsCellActive(Scene.cx+cmx, Scene.cy+cmy))&&(Scene.IsWalkeableHero(Scene.cx+cmx, Scene.cy+cmy)))
 		{
 			Mouse->SetPointer(ATTACK);
 			if(release_and_pressbr)
 			{
 				Sound.Playeffects(1);
 				release_and_pressbr=false;
-				Scene.SetAnimateTile(Scene.cx+cmx,Scene.cy+cmy);
+				//Se marca el tile como animado, con el fuego, y además se marca a false el flag de walkability
+				Scene.SetFireTile(Scene.cx+cmx,Scene.cy+cmy);
 			}
 		}
 	}
