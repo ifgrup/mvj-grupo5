@@ -16,6 +16,7 @@ cEnemy::cEnemy(WalkingTypes wtype) //en función del tipo de walkability, crea el
 	
 		case FLALLING:
 			pWalkabilityFunctor=new cWalkabilityFunctorFlalling();
+			pStrategyFunctor = new cStrategyPatrol();
 			break;
 	
 		case PATROL:
@@ -166,7 +167,6 @@ void cEnemy::GetCell(int *cellx,int *celly)
 	*celly = cy;
 }
 
-
 bool cEnemy::IsThisTileWalkeableForMe(CTile2D* pTile)
 {
 	//Beep(1000,100);
@@ -180,3 +180,8 @@ void cEnemy::GetNextTarget(int* newcx,int*newcy)
 	*newcy=18;
 }
 
+
+bool cEnemy::HasDetectedPlayer(int x, int y)
+{
+	return pStrategyFunctor->IsPlayerDetected(cx, cy, x, y);
+}
