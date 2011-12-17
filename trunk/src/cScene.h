@@ -45,7 +45,7 @@ public:
 	bool IsCellVisited(int cellx, int celly); //LHA
 	bool IsCellActive(int cellx, int celly);
 	bool IsVisible(int cellx, int celly); // LHA
-	bool IstWalkeableHero(int cellx, int celly);
+	bool IsWalkeableHero(int cellx, int celly);
 	void ResetVisible();
 	CTile2D** getTilesMap() { return TilesMap; }
 	int  getTileType(int idx); //VMH
@@ -59,6 +59,7 @@ public:
 	bool IsFogged(int cellx,int celly); //VMH Oscura inicialmente, ya visitada
 	void MoveScroll(int x,int y);
 	void SetAnimateTile(int cx,int cy);
+	void SetFireTile(int cx,int cy);
 private:
 	CTile2D  **TilesMap;  /*VMH mapa cpn la información de las casillas. Inicialmente sólo tenía el índice para acceder al bitmap.
 			     Ahora contiene más información, por eso utilizamos la estuctura InfoTile2D*/

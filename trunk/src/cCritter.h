@@ -5,6 +5,9 @@
 #include <windows.h>
 #include "cTrajectory.h"
 #include "cPath.h"
+#include "cWalkabilityFunctor.h"
+#include "cScene.h"
+
 
 class cScene;
 
@@ -40,7 +43,7 @@ private:
 	bool selected;	//Selected for move or attack
 
 	//cTrajectory Trajectory;
-	cPath Trajectory;
+	cPath* Trajectory;
 
 	int seq;		//Sequence animation control
 	int delay;		//Animation delay

@@ -176,6 +176,8 @@
     <ClCompile Include="cSkeleton.cpp" />
     <ClCompile Include="CTile2D.cpp" />
     <ClCompile Include="cTrajectory.cpp" />
+    <ClCompile Include="cWalkabilityFunctor.cpp" />
+    <ClCompile Include="cWalkabilityFunctorFlalling.cpp" />
     <ClCompile Include="vlrSoundLayer.cpp" />
     <ClCompile Include="Win32Main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -201,6 +203,8 @@
     <ClInclude Include="cSkeleton.h" />
     <ClInclude Include="CTile2D.h" />
     <ClInclude Include="cTrajectory.h" />
+    <ClInclude Include="cWalkabilityFunctor.h" />
+    <ClInclude Include="cWalkabilityFunctorFlalling.h" />
     <ClInclude Include="vlrSoundLayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

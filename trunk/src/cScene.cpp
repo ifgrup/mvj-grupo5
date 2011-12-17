@@ -33,6 +33,7 @@ void cScene::LoadMap(char *file)
 			int idTile=abs(n)%10;
 			TilesMap[k]=new CTile2D(idTile); //VMH
 			
+			TilesMap[k]->setWalkeable(idTile==0); //Por defecto, walkeable si idTile==1
 			TilesMap[k]->setVisible(false);
 			TilesMap[k]->setFogged(true);
 			
@@ -146,10 +147,10 @@ bool cScene::IsVisible(int cellx, int celly)
 	return TilesMap[idx]->IsVisible();
 }
 
-bool cScene::IstWalkeableHero(int cellx, int celly)
+bool cScene::IsWalkeableHero(int cellx, int celly)
 {
 	int idx=(celly*SCENE_AREA)+cellx;
-	return TilesMap[idx]->getId()==0;
+	return TilesMap[idx]->IsWalkeable();
 }
 
 bool cScene::IsCellActive(int CellX, int CellY)
@@ -263,13 +264,24 @@ void cScene::IncTickCount()
 }
 
 
-void cScene::SetAnimateTile(int cx,int cy){
+//void cScene::SetAnimateTile(int cx,int cy)
+//{
+//
+//	int idx=cy*SCENE_AREA+cx;
+//	TilesMap[idx]->setAnimated(true);
+//	TilesMap[idx]->setNumSprites(5);
+//	TilesMap[idx]->setActive(true);
+//	TilesMap[idx]->setWalkeable(false);
+//}
+
+void cScene::SetFireTile(int cx,int cy)
+{
 
 	int idx=cy*SCENE_AREA+cx;
 	TilesMap[idx]->setAnimated(true);
-	TilesMap[idx]->setNumSprites(5);
-	TilesMap[idx]->setActive(true);
-	TilesMap[idx]->setWalkeable(false);
-
-
+	//IMPORTANTE: Falta poner el idTile correcto para que seleccione la animación de fuego
+	//TilesMap[idx]->setIdTile.....
+	TilesMap[idx]->setNumSprites(3);
+	TilesMap[idx]->setActive(true); //ask lha
+	TilesMap[idx]->setFired(true);
 }

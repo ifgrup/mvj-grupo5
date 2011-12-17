@@ -8,6 +8,7 @@
 
 #include "CTile2D.h"
 #include "cLog.h"
+#include "cWalkabilityFunctor.h"
 
 class cAStar  
 {
@@ -52,7 +53,7 @@ public:
 	int  ReadPathY(int pathfinderID,int pathLocation);
 
 /////////////////////////////////
-	void LoadMap(CTile2D **map,pFnCheckWalkeable pFuncionWalkeable); //VMH. Para poder especificar diferentes valores walkeables
+	void LoadMap(CTile2D **map,cWalkabilityFunctor* pWalkFunctor); //VMH. Para poder especificar diferentes valores walkeables
 	void PrintPath();
 	void NextCell(int *cx,int *cy);
 	

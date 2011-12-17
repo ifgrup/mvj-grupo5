@@ -5,13 +5,24 @@
 #include "cTrajectory.h"
 #include "cPath.h"
 #include "cScene.h"
+#include "cWalkabilityFunctor.h"
+#include "cWalkabilityFunctorFlalling.h"
 
+
+typedef enum WalkingTypes{
+	FLALLING=1,
+	PATROL=2,
+	SQUADRON=3
+}WalkingTypes;
 
 
 class cEnemy
 {
 public:
 	cEnemy(void);
+	cEnemy(WalkingTypes walkabilityType); //en función del tipo de walkability, crea el Functor correspondiente
+	cWalkabilityFunctor* pWalkabilityFunctor;
+
 	virtual ~cEnemy(void);
 
 	void GoToCell(CTile2D **map,int destcx,int destcy);

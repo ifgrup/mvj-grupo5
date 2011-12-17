@@ -29,10 +29,10 @@ public:
 	void ERRCHECK(FMOD_RESULT result);
 	void vlrSoundLayer::LoadData();
 
-	bool vlrSoundLayer::PlaySound(int state);
-	bool vlrSoundLayer::Playeffects(int state);
-	bool vlrSoundLayer::SoundEffectsUnit(cCritter *Critter);
-	void vlrSoundLayer::Finalize();
+	bool PlaySound(int state);
+	bool Playeffects(int state);
+	bool SoundEffectsUnit(cCritter *Critter);
+	void Finalize();
 	//
 private:
 	FMOD::Sound      *sound1, *sound2, *sound3,*sound4,*sound5;
