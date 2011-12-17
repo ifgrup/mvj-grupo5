@@ -35,7 +35,8 @@ public:
 	bool IsFiring();
 	bool IsMoving();
 	bool AlAtaquue();
-	
+	void Damage(); //llamada cuando nos ha contactado un enemigo
+	bool IsAlive();//Indica si está vivo o no
 
 private:
 	int x,y;		//Position in total map

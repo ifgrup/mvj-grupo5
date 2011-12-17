@@ -29,6 +29,7 @@ private:
 	bool LoopOutput();
 
 	void UpdateScene();
+	void ActualizarIA();
 
 	cGraphicsLayer Graphics;
 	cInputLayer Input;
@@ -45,6 +46,9 @@ private:
 	bool SoundSistem();
 	void ProcessOrder();
 	bool Render();
+
+	void EfectoPantalla(int idEfecto); //hará un efecto visual para indicar que nos han dado
+	void LoadEnemies();
 };
 
 #endif

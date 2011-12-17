@@ -2,50 +2,59 @@
 
 
 
-cEnemy::cEnemy(WalkingTypes wtype) //en función del tipo de walkability, crea el Functor correspondiente
+cEnemy::cEnemy(int pcx,int pcy,WalkingTypes wtype,StrategyTypes stype) //en función del tipo de walkability, crea el Functor correspondiente
 {
-	
-	SetPosition(8*32,1*32);
-	SetCell(8,1);
+
 
 	seq=0;
 	delay=0;
+	
+	cxHome=pcx;
+	cyHome=pcy;
+	
+	
+	SetPosition(pcx*32,pcy*32);
+	cx=pcx;
+	cy=pcy;
+
+	
 	
 	switch (wtype)
 	{
 	
 		case FLALLING:
 			pWalkabilityFunctor=new cWalkabilityFunctorFlalling();
-			pStrategyFunctor = new cStrategyPatrol();
 			break;
 	
-		case PATROL:
+		case FLISKINS:
 			pWalkabilityFunctor=NULL;
 			break;
 	
-		case SQUADRON:
+		case GRIJANDER:
 			pWalkabilityFunctor=NULL;
 			break;
 	}
 
+	switch(stype)
+	{
+	case PATROL:
+		pStrategyFunctor = new cStrategyPatrol();
+		break;
+	case FOLOU:
+		pStrategyFunctor = new cStrategyFolouDeCritter();
+		
+	}
+
 	this->Trajectory=new cPath(pWalkabilityFunctor);
+	
+	//this->Trajectory->xf=this->cxHome;
+	//this->Trajectory->yf=this->cyHome;
+	//this->Trajectory->Done();
+
 }
 
 
-cEnemy::cEnemy()
-{
-	//SetPosition(8*32,1*32);
-	//SetCell(8,1);
 
-
-	//seq=0;
-	//delay=0;
-
-	////CPath must be created, with it's own walkability function
-	////this->Trajectory=new cPath(&(cEnemy::IsThisTileWalkeableForMe));
-	//this->Trajectory=new cPath(pWalkabilityFunctor);
-	//
-}
 cEnemy::~cEnemy()
 {
 
@@ -184,4 +193,39 @@ void cEnemy::GetNextTarget(int* newcx,int*newcy)
 bool cEnemy::HasDetectedPlayer(int x, int y)
 {
 	return pStrategyFunctor->IsPlayerDetected(cx, cy, x, y);
+}
+void cEnemy::GoHome()
+{
+	if (cx != cxHome || cy != cyHome)
+	{
+		cx=cxHome;
+		cy=cyHome;
+		x=cx*32;
+		y=cy*32; //Actualizamos también la posición gráfica.
+		Trajectory->Done(); //Al recalcular su objetivo, se asignará el nuevo objetivo
+	}
+}
+
+
+bool cEnemy::GetDestinyCell(int* pcx, int* pcy)
+{
+	
+	bool result=Trajectory!=NULL;
+
+	if (Trajectory )
+	{
+		*pcx=Trajectory->nxf;
+		*pcy=Trajectory->nyf;
+		
+		if (*pcx==-1 && *pcy ==-1)
+			result=false;
+	}
+	
+	return result;
+
+}
+
+bool cEnemy::NextTarget(int CritterX, int CritterY,int* newx,int* newy)
+{
+	return pStrategyFunctor->GoToNextTarget(CritterX, CritterY,cx,cy,newx,newy);
 }

@@ -1,4 +1,6 @@
 #pragma once
+#define ENEMY_DETECT_ZONE 2
+
 class cStrategyFunctor
 {
 public:
@@ -7,9 +9,10 @@ public:
 
 	virtual void IncTickCount();
 	virtual bool IsPlayerDetected(int EnemyX, int EnemyY, int PlayerX, int PlayerY);
-	virtual void GoToNextTarget();
+	virtual bool GoToNextTarget(int ccx, int ccy,int ecx,int ecy,int* new_x,int *new_y);
 
 private:
 	int TickCount;
+
 };
 

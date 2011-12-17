@@ -14,6 +14,9 @@ cPath::cPath(cWalkabilityFunctor* pWalkFunctor) //VMH. Pasamos un puntero al obj
 	nxf=-1;	//New direction initialization (false)
 	nyf=-1;
 
+	xf=-1;//Marcas de inicialización
+	yf=-1; 
+
 	this->isWalkVariable=0; /*VMH by default, false*/
 	this->pWalkabilityFunctor=pWalkFunctor; //VMH
 
@@ -69,8 +72,8 @@ void cPath::Make(CTile2D** map,int cx,int cy,int cxdest,int cydest)
 
 void cPath::ReMake(CTile2D **map,int cxdest,int cydest)
 {
-	/*VMH llamada cuando cambiamos la dirección en medio de un movimiento*/
-	if(xf!=cxdest && yf!=cydest)
+	/*Eliminamos la restricción para forzar la recarga de la trayectoria aunque la rehagamos para ir al mismo sitio*/
+	//if(xf!=cxdest && yf!=cydest)
 	{
 		world=map;
 		nxf=cxdest;

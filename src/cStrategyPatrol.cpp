@@ -1,30 +1,44 @@
 #include "cStrategyPatrol.h"
 
-#define ENEMY_DETECT_ZONE 2
+
 
 cStrategyPatrol::cStrategyPatrol(void)
 {
+	actualx=-5;
+	actualy=-5; //marcas para que la primera vez siempre de que son diferentes al nuevo destino
 }
 
 cStrategyPatrol::~cStrategyPatrol(void)
 {
 }
 
-bool cStrategyPatrol::IsPlayerDetected(int EnemyX, int EnemyY, int PlayerX, int PlayerY)
-{
-	if((PlayerX > (EnemyX - ENEMY_DETECT_ZONE) && PlayerX < (EnemyX + ENEMY_DETECT_ZONE)) &&
-		(PlayerY > (EnemyY - ENEMY_DETECT_ZONE) && PlayerY < (EnemyY + ENEMY_DETECT_ZONE)))
-		return true;
 
-	return false;
-}
 
 void cStrategyPatrol::IncTickCount()
 {
 
 }
 
-void cStrategyPatrol::GoToNextTarget()
+bool cStrategyPatrol::GoToNextTarget(int ccx, int ccy,int ecx,int ecy,int* new_x,int *new_y)
 {
+	bool bcambio=false;
+	bool detected=IsPlayerDetected(ecx,ecy,ccx,ccy);
+
+	if (!detected)
+		return false;
+
+	//está en nuestra zona de influencia
+	if (actualx==ccx && actualy == ccy)
+	{
+		//estoy yendo a donde está el critter, y no ha cambiado su posición
+		return false;
+	}
+
+	//aquí sabemos que el critter está en otra celda diferente a la que estábamos yendo, reevaluamos
+	actualx=ccx;
+	actualy=ccy;
+	*new_x=actualx;
+	*new_y=actualy;
+	return true;
 
 }

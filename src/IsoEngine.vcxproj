@@ -91,6 +91,9 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0c0a</Culture>
     </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy .\libinc\fmod\api\fmodex.dll .\Debug</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -174,6 +177,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="cSkeleton.cpp" />
+    <ClCompile Include="cStrategyFolouDeCritter.cpp" />
     <ClCompile Include="cStrategyFunctor.cpp" />
     <ClCompile Include="cStrategyPatrol.cpp" />
     <ClCompile Include="CTile2D.cpp" />
@@ -203,6 +207,7 @@
     <ClInclude Include="cPath.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cSkeleton.h" />
+    <ClInclude Include="cStrategyFolouDeCritter.h" />
     <ClInclude Include="cStrategyFunctor.h" />
     <ClInclude Include="cStrategyPatrol.h" />
     <ClInclude Include="CTile2D.h" />

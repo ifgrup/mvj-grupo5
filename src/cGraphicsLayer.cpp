@@ -11,6 +11,7 @@ cGraphicsLayer::cGraphicsLayer()
 	g_pD3DDevice = NULL;
 	g_pSprite = NULL;
 	font = NULL;
+	ticsTilt=0;
 }
 
 cGraphicsLayer::~cGraphicsLayer(){}
@@ -290,17 +291,41 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 	int miniMapaX = 672;
 	int miniMapaY = 60;
 
+	static int offsetTilt=0;
+	static int ticsSleep=0;
+
 	//Tile based map
 	fx=Scene->cx+SCENE_WIDTH;
 	fy=Scene->cy+SCENE_HEIGHT;
 
 	for(y=Scene->cy;y<fy;y++)
 	{
-		panty = SCENE_Yo + ((y-Scene->cy)<<5);
+		if (ticsTilt!=0)
+		{
+			ticsSleep++;
+			if (!(ticsSleep%40))
+			{
+				int inc=-1;
+				ticsTilt--;
+			
+				if (ticsTilt%2)
+					inc=-1;
+				else
+					inc=1;
 
+				offsetTilt=inc*5;
+			}
+		}
+		else
+		{
+			offsetTilt=0;
+		}
+		
+		panty = SCENE_Yo + ((y-Scene->cy)<<5)+offsetTilt;
+		
 		for(x=Scene->cx;x<fx;x++)
 		{
-			pantx = SCENE_Xo + ((x-Scene->cx)<<5);
+			pantx = SCENE_Xo + ((x-Scene->cx)<<5)+offsetTilt;
 
 			//n = Scene->map[(y<<5)+x]; /*VMH Utilizamos la info del mapa, no la de visibilidad*/
 			/***VMH*/
@@ -447,7 +472,7 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skelet
 	{
 		cEnemy* bicho=Enemies[i];
 		bicho->GetCell(&cx,&cy);
-		if(Scene->Visible(cx,cy))
+		if(Scene->IsCellActive(cx,cy))
 		{
 			bicho->GetRect(&rc,&posx,&posy,Scene); /*Obtiene del critter, la posición EN PANTALLA donde pintar, y el rectángulo dentro del bitmap que pintar*/
 			g_pSprite->Draw(texCharacters,&rc,NULL, 
@@ -643,4 +668,9 @@ bool cGraphicsLayer::DrawDialog(cDialog* pDialog)
 
 
 	return true;
+}
+
+void cGraphicsLayer::EfectoTilt()
+{
+	ticsTilt=15;
 }

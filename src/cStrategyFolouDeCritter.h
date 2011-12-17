@@ -1,13 +1,13 @@
 #pragma once
 #include "cstrategyfunctor.h"
-class cStrategyPatrol :	public cStrategyFunctor
+class cStrategyFolouDeCritter :	public cStrategyFunctor
 {
 public:
-	cStrategyPatrol(void);
-	~cStrategyPatrol(void);
-
-	virtual void IncTickCount();
+	cStrategyFolouDeCritter(void);
+	virtual ~cStrategyFolouDeCritter(void);
+	
 	virtual bool GoToNextTarget(int ccx, int ccy,int ecx,int ecy,int* new_x,int *new_y);
+
 private:
 	int actualx;
 	int actualy;
