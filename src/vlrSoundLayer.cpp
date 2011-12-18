@@ -66,11 +66,11 @@ void vlrSoundLayer::Finalize()
 }
 
 void vlrSoundLayer::LoadData(){
-	result = system->createSound("drumloop.wav", FMOD_SOFTWARE, 0, &sound1);
-	result = system->createSound("mvj1_3.mp3", FMOD_SOFTWARE, 0, &sound2);
-		result = system->createSound("efcalico.mp3", FMOD_SOFTWARE, 0, &sound3);
-		result = system->createSound("laser-01.mp3", FMOD_SOFTWARE, 0, &sound4);
-			result = system->createSound("efcalico.mp3", FMOD_SOFTWARE, 0, &sound5);//falta sonido pasos
+	result = system->createSound("intro2dgame_2.wav", FMOD_SOFTWARE, 0, &sound1);//INTRO
+	result = system->createSound("mvj1_3.wav", FMOD_SOFTWARE, 0, &sound2);//MÚSICA JUEGO
+		result = system->createSound("efcalico.mp3", FMOD_SOFTWARE, 0, &sound3);//ALATAQUUE CALICO
+		result = system->createSound("laser-01.mp3", FMOD_SOFTWARE, 0, &sound4);//DISPARO
+			result = system->createSound("marching-01.mp3", FMOD_SOFTWARE, 0, &sound5);//PASOS
 		
   // ERRCHECK(result);
   
@@ -126,30 +126,29 @@ bool vlrSoundLayer::Playeffects(int state){
 
 	switch(state)
 	{
-		case 1:
-			channelef->setPaused(false);
+		case DISPARO :
+		channelef->setPaused(false);
 		channelef->isPlaying(&sonando);
-		if(sonando==false){
+			if(sonando==false)
+			{
 			result =system->playSound(FMOD_CHANNEL_FREE, sound4, false, &channelef);
 			
-		}
+			}
 		break;
 
-	case 2:
-		
+		case PASOS:
 			channelef1->setPaused(false);
 			channelef1->isPlaying(&sonando1);
-			if(sonando1==false){
-		
+			if(sonando1==false)
+			{
 			result =system->playSound(FMOD_CHANNEL_FREE, sound5, false, &channelef1);
 			}
 			break;
-case 3:
-		
+		case ATAQUE:
 			//channelef2->setPaused(false);
 			channelef2->isPlaying(&sonando1);
-			if(sonando1==false){
-		
+			if(sonando1==false)
+			{
 			result =system->playSound(FMOD_CHANNEL_FREE, sound3, false, &channelef2);
 			}
 			break;
@@ -159,38 +158,29 @@ case 3:
 
 						return true;
 
-
-
-	//channelef->setPaused(true);
-	//result = sound3->setMode(FMOD_LOOP_OFF); 
-
-/*
-	channelef->isPlaying(&sonando);
-	if(sonando==false){
-	result =system->playSound(FMOD_CHANNEL_FREE, sound3, false, &channelef);
-	}
-	return true;*/
 	}
 
 
-bool vlrSoundLayer::SoundEffectsUnit(cCritter *Critter){
+bool vlrSoundLayer::SoundEffectsUnit(cCritter *Critter)
+{
 
 
-	if(Critter->IsMoving()){
-		Playeffects(2);
+	if(Critter->IsMoving())
+	{
+		Playeffects(PASOS);
 	}else{
 	channelef1->setPaused(true);
 	}
 
 	if(Critter->GetShooting()){
-	Playeffects(1);
+		Playeffects(DISPARO);
 	
 	}else{
 	channelef->setPaused(true);
 	}
 
 	if(Critter->AlAtaquue()){
-	Playeffects(3);
+		Playeffects(ATAQUE);
 	
 	}else{
 //channelef2->setPaused(true);
