@@ -32,7 +32,7 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	//sound 
 
-	//Sound.Init();
+	Sound.Init();
 	Sound.LoadData();
 	
 	pDialog = new cDialog();
@@ -139,9 +139,22 @@ bool cGame::LoopProcess()
 				//Update Scene //VMH:
 				ProcessOrder();
 				UpdateScene();
+				state=win();
 			}
 			break;
 		}
+
+		case STATE_WIN: 
+		{
+			pDialog->setText("\n\n\n\\tNO LO CONSEGUISTE!!\n\n\n\t\tGAME OVER!!");
+				pDialog->Die();
+				pDialog->Show();
+				
+			
+			break;
+		}
+		
+
 	}
 	return true;
 }
@@ -317,6 +330,10 @@ void cGame::ProcessOrder()
 				release_and_pressbr=false;
 				//Se marca el tile como animado, con el fuego, y además se marca a false el flag de walkability
 				Scene.SetFireTile(Scene.cx+cmx,Scene.cy+cmy);
+				char kk[100];
+		sprintf(kk,"puerta %d %d\n",Scene.cx+cmx,Scene.cy+cmy);
+		cLog::Instance()->Msg(kk);
+				
 			}
 		}
 	}
@@ -426,4 +443,14 @@ void cGame::LoadEnemies()
 	}
 
 	fclose(f);
+}
+int cGame::win()
+{
+	int cxf,cyf; 
+
+		Critter.GetCell(&cxf,&cyf);
+		if((cxf==CXF)&&(cyf==CYF)){
+			return STATE_WIN;
+		}
+		return STATE_GAME;
 }

@@ -12,6 +12,9 @@
 
 #define STATE_MAIN	0
 #define STATE_GAME	1
+#define STATE_WIN	2
+#define CXF			61
+#define CYF			51
 
 class cGame
 {
@@ -30,7 +33,7 @@ private:
 
 	void UpdateScene();
 	void ActualizarIA();
-
+	int win();
 	cGraphicsLayer Graphics;
 	cInputLayer Input;
 	cScene Scene;
@@ -49,6 +52,7 @@ private:
 	void EfectoPantalla(int idEfecto); //hará un efecto visual para indicar que nos han dado
 	void LoadEnemies();
 	bool boton_derecho_nunca_pulsado;
+	
 };
 
 #endif

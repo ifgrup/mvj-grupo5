@@ -12,6 +12,7 @@
 #include "cCritter.h"
 #define STATE_MAIN	0
 #define STATE_GAME	1
+#define STATE_WIN	2
 #define PASOS	0
 #define DISPARO	1
 #define ATAQUE	2	
