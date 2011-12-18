@@ -116,3 +116,7 @@ bool CTile2D::IsFired()
 {
 	return isFired;
 }
+void CTile2D::setIdTile(int nidTile)
+{
+this->idTile=nidTile;
+}
