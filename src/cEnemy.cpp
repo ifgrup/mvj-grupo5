@@ -233,3 +233,8 @@ bool cEnemy::NextTarget(int CritterX, int CritterY,int* newx,int* newy)
 {
 	return pStrategyFunctor->GoToNextTarget(CritterX, CritterY,cx,cy,newx,newy);
 }
+
+void cEnemy::RecargaWalkability()
+{
+	this->Trajectory->ReloadWalkability();
+}

@@ -19,6 +19,7 @@ cPath::cPath(cWalkabilityFunctor* pWalkFunctor) //VMH. Pasamos un puntero al obj
 
 	this->isWalkVariable=0; /*VMH by default, false*/
 	this->pWalkabilityFunctor=pWalkFunctor; //VMH
+	this->world=NULL;
 
 }
 
@@ -73,7 +74,7 @@ void cPath::Make(CTile2D** map,int cx,int cy,int cxdest,int cydest)
 void cPath::ReMake(CTile2D **map,int cxdest,int cydest)
 {
 	/*Eliminamos la restricción para forzar la recarga de la trayectoria aunque la rehagamos para ir al mismo sitio*/
-	//if(xf!=cxdest && yf!=cydest)
+	if(xf!=cxdest && yf!=cydest)
 	{
 		world=map;
 		nxf=cxdest;
@@ -187,3 +188,8 @@ void cPath::CalcDir(int x1,int y1,int x2,int y2)
 	}
 }
 
+void cPath::ReloadWalkability()
+{
+	if (AStar && world && pWalkabilityFunctor)
+		AStar->ReLoadMap(this->world,this->pWalkabilityFunctor);
+}

@@ -50,7 +50,7 @@ public:
 	int  Faced();
 	bool IsDone();
 	void Done();
-
+	void ReloadWalkability();
 private:
 	void CalcDir(int x1,int y1,int x2,int y2);
 

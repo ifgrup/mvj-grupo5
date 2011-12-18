@@ -51,6 +51,7 @@ public:
 	
 	bool HasDetectedPlayer(int x, int y);
 	bool NextTarget(int CritterX, int CritterY,int* newx,int* newy);
+	void RecargaWalkability();
 
 private:
 	int x,y;		//Position in total map
