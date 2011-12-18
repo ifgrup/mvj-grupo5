@@ -49,6 +49,7 @@ public:
 	void setNumSprites(int nSprites);
 	void setFired (bool);
 	bool IsFired();
+	void setIdTile(int nidTile);
 
 };
 

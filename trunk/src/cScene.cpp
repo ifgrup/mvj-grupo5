@@ -281,7 +281,8 @@ void cScene::SetFireTile(int cx,int cy)
 	TilesMap[idx]->setAnimated(true);
 	//IMPORTANTE: Falta poner el idTile correcto para que seleccione la animación de fuego
 	//TilesMap[idx]->setIdTile.....
-	TilesMap[idx]->setNumSprites(3);
+	TilesMap[idx]->setIdTile(3);
+	TilesMap[idx]->setNumSprites(4);
 	TilesMap[idx]->setActive(true); //ask lha
 	TilesMap[idx]->setFired(true);
 }
