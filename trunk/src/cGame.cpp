@@ -375,10 +375,8 @@ void cGame::ActualizarIA()
 			bicho->GoToCell(Scene.getTilesMap(),nuevax,nuevay);
 
 
-		//Actualizamos Mapas, le decimos que vaya a la celda a la que actualmente ya está yendo, pero recargando mapa para reevaluar walkability
-		int destx,desty;
-		if (!nuevo_destino && bicho->GetDestinyCell(&destx,&desty))
-			bicho->GoToCell(Scene.getTilesMap(),destx,desty);
+		//Actualizamos Mapas de las trajectorias re-evaluando las walkabilitys
+		bicho->RecargaWalkability();
 		
 
 		//Control de colisión

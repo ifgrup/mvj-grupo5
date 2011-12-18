@@ -52,6 +52,7 @@ public:
 	void ReadPath(int pathfinderID,int currentX,int currentY, int pixelsPerFrame);
 	int  ReadPathX(int pathfinderID,int pathLocation);
 	int  ReadPathY(int pathfinderID,int pathLocation);
+	void ReLoadMap(CTile2D** map,cWalkabilityFunctor* pWalkFunctor);
 
 /////////////////////////////////
 	void LoadMap(CTile2D **map,cWalkabilityFunctor* pWalkFunctor); //VMH. Para poder especificar diferentes valores walkeables

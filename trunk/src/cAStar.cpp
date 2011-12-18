@@ -564,3 +564,8 @@ int cAStar::ReadPathY(int pathfinderID,int pathLocation)
 	}
 	return y;
 }
+
+void cAStar::ReLoadMap(CTile2D** map,cWalkabilityFunctor* pWalkFunctor)
+{
+	this->LoadMap(map,pWalkFunctor);
+}
