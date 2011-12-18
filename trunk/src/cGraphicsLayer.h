@@ -43,6 +43,7 @@ public:
 	bool DrawDialog(cDialog* pDialog);
 	bool DrawDialogBackground(cDialog* pDialog);
 	void EfectoTilt();
+	int CalculaOffsetTilt();
 
 private:
 

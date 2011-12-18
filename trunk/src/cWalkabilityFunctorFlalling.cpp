@@ -12,5 +12,5 @@ cWalkabilityFunctorFlalling::~cWalkabilityFunctorFlalling(void)
 
 bool cWalkabilityFunctorFlalling::IsThisTileWalkableForMe(CTile2D* pTile)
 {
-	return true;
+	return !pTile->IsFired();
 }

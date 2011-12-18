@@ -26,8 +26,8 @@ cEnemy::cEnemy(int pcx,int pcy,WalkingTypes wtype,StrategyTypes stype) //en func
 			pWalkabilityFunctor=new cWalkabilityFunctorFlalling();
 			break;
 	
-		case FLISKINS:
-			pWalkabilityFunctor=NULL;
+		case RANDOM:
+			pWalkabilityFunctor=new cWalkabilityFunctorRandom();
 			break;
 	
 		case GRIJANDER:
@@ -35,6 +35,10 @@ cEnemy::cEnemy(int pcx,int pcy,WalkingTypes wtype,StrategyTypes stype) //en func
 			break;
 	}
 
+	//La animación se carga de characters.png. Empieza en la 3, por eso:
+	filaTilesPersonaje=2+(int)wtype;
+
+	//ahora tipo de estrategia
 	switch(stype)
 	{
 	case PATROL:
@@ -71,7 +75,7 @@ void cEnemy::GetRect(RECT *rc,int *posx,int *posy,cScene *Scene)
 
 	/*VMH Y luego, en función de para dónde miramos, y la secuencia en la animación, devolvemos el rectángulo dentro del bitmap que representa el gráfico
 	actual a pintar del bichejo*/
-	int yInicial=3*32; //La tercera fila en el png de animaciones
+	int yInicial=filaTilesPersonaje*32; //La tercera fila en el png de animaciones
 
 	switch(Trajectory->Faced())
 	{

@@ -184,6 +184,7 @@
     <ClCompile Include="cTrajectory.cpp" />
     <ClCompile Include="cWalkabilityFunctor.cpp" />
     <ClCompile Include="cWalkabilityFunctorFlalling.cpp" />
+    <ClCompile Include="cWalkabilityFunctorRandom.cpp" />
     <ClCompile Include="vlrSoundLayer.cpp" />
     <ClCompile Include="Win32Main.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -214,6 +215,7 @@
     <ClInclude Include="cTrajectory.h" />
     <ClInclude Include="cWalkabilityFunctor.h" />
     <ClInclude Include="cWalkabilityFunctorFlalling.h" />
+    <ClInclude Include="cWalkabilityFunctorRandom.h" />
     <ClInclude Include="vlrSoundLayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

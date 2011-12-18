@@ -8,7 +8,7 @@
 
 //Visible part
 #define SCENE_WIDTH		25
-#define SCENE_HEIGHT	15
+#define SCENE_HEIGHT	16
 
 //Dimension = Area^2
 #define SCENE_AREA		32
