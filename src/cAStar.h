@@ -2,10 +2,11 @@
 #ifndef __ASTAR_H__
 #define __ASTAR_H__
 
-#define mapWidth		32
-#define mapHeight		32
+#define mapWidth		SCENE_AREA
+#define mapHeight		SCENE_AREA
 #define numberPeople	3
 
+#include "cScene.h"
 #include "CTile2D.h"
 #include "cLog.h"
 #include "cWalkabilityFunctor.h"

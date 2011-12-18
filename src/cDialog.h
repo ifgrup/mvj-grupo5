@@ -5,8 +5,9 @@
 #define BUTTON_SIZE_HORIZONTAL  70
 #define BUTTON_SIZE_VERTICAL    30
 
-#define DIALOG_STATE_SHOW       1
 #define DIALOG_STATE_HIDE       0
+#define DIALOG_STATE_SHOW       1
+#define DIALOG_STATE_EXIT       2
 
 #define DIALOG_IMG_SIZE         43
 #define DIALOG_IMG_UL_X         0
@@ -32,6 +33,11 @@
 
 #define DIALOG_BOX_OFFSET       11
 
+#define DIALOG_BUTTON_UL_X      0
+#define DIALOG_BUTTON_UL_Y      97
+#define DIALOG_BUTTON_BR_X      165
+#define DIALOG_BUTTON_BR_Y      130
+
 class cDialog
 {
 public:
@@ -49,6 +55,8 @@ public:
 	void setButtonPos(int X, int Y);
 
 	char* getText();
+	
+	void Die();
 
 	void Show();
 	void Hide();
@@ -74,6 +82,8 @@ private:
 
 	// Estado del Dialog
 	int DialogState;
+
+	bool bSalir;
 	
 };
 

@@ -37,7 +37,6 @@ private:
 	cDialog *pDialog;
 	
 	cCritter Critter;
-	cSkeleton Skeleton;
 	cEnemy** listEnemies; //array of enemies
 	short num_enemies;//num of enemies
 	void UpdateEnemiesTarget(int cx,int cy);

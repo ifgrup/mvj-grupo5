@@ -33,7 +33,7 @@ bool cGraphicsLayer::Init(HWND hWnd)
 	D3DPRESENT_PARAMETERS d3dpp; 
 	ZeroMemory( &d3dpp, sizeof( d3dpp ) );
 
-	d3dpp.Windowed               = FALSE;
+	d3dpp.Windowed               = true;
 	d3dpp.SwapEffect             = D3DSWAPEFFECT_DISCARD;	//Efficient page flipping
 	d3dpp.BackBufferWidth        = SCREEN_RES_X;
     d3dpp.BackBufferHeight       = SCREEN_RES_Y;
@@ -103,7 +103,7 @@ void cGraphicsLayer::LoadData()
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0xffffffff,NULL,NULL,&texGame);
 	//Tiles
-	D3DXCreateTextureFromFileEx(g_pD3DDevice,"tiles.png",0,0,1,0,D3DFMT_UNKNOWN,
+	D3DXCreateTextureFromFileEx(g_pD3DDevice,"tiles_mapa.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0x00ff00ff,NULL,NULL,&texTiles);
 	//Characters
@@ -126,6 +126,11 @@ void cGraphicsLayer::LoadData()
 	D3DXCreateTextureFromFileEx(g_pD3DDevice, "Dialogs.png",0,0,1,0,D3DFMT_UNKNOWN,
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0xffffffff,NULL,NULL,&texDialog);
+	//Animated Tiles
+	D3DXCreateTextureFromFileEx(g_pD3DDevice, "animated.png",0,0,1,0,D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
+								0xffffffff,NULL,NULL,&animatedTiles);
+
 }
 
 void cGraphicsLayer::UnLoadData()
@@ -175,16 +180,22 @@ void cGraphicsLayer::UnLoadData()
 		g_pSprite->Release();
 		g_pSprite = NULL;
 	}
+	if (animatedTiles)
+	{
+		animatedTiles->Release();
+		animatedTiles = NULL;
+
+	}
 }
 
-bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies, cDialog* pDialog)
+bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cEnemy** Enemies, cDialog* pDialog)
 {
 	//HRESULT Draw( LPDIRECT3DTEXTURE9 pTexture, CONST RECT *pSrcRect,
 	//				CONST D3DXVECTOR3 *pCenter,  CONST D3DXVECTOR3 *pPosition,
 	//				D3DCOLOR Color);
 	g_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, 0xFF000000, 0, 0 );
 	g_pD3DDevice->BeginScene();
-
+	static bool bPrimeraVez = false;
 		//--- SPRITES ---
 		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
@@ -196,10 +207,26 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 
 				case STATE_GAME:
 								DrawScene(Scene);
-								DrawUnits(Scene,Critter,Skeleton,Enemies);
+								DrawUnits(Scene,Critter,Enemies);
 								DrawVisibility(Scene, Critter);
+								
+								if(Critter->GetLives() == CRITTER_LIVES)
+									bPrimeraVez = true;
+								
+								RECT r;
+								int tam = 139;
+								int CoordY;
 
-								g_pSprite->Draw(texGame,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
+								if(bPrimeraVez)
+								{
+									CoordY = tam * (Critter->GetLives() - 1);
+									bPrimeraVez = false;
+								}
+								else
+									CoordY = tam * Critter->GetLives();
+
+								SetRect(&r, 0, CoordY, 800,(Critter->GetLives() * tam) + tam);
+								g_pSprite->Draw(texGame,&r,NULL,&D3DXVECTOR3(0.0f,460.0f,0.0f),0xFFFFFFFF);
 								DrawRadar(Scene);
 								
 								if(pDialog->getState() == DIALOG_STATE_SHOW)
@@ -217,16 +244,16 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 		{
 			if(pDialog->getState() == DIALOG_STATE_SHOW)
 			{
-		RECT rc;
-		int x, y, xf, yf;
+				RECT rc;
+				int x, y, xf, yf;
 
-		pDialog->getPos(&x, &y);
-		pDialog->getSize(&xf, &yf);
-		xf+=x;
-		yf+=y;
+				pDialog->getPos(&x, &y);
+				pDialog->getSize(&xf, &yf);
+				xf+=x;
+				yf+=y;
 
-		SetRect( &rc, x+40, y+40, 50, 400 );
-		font->DrawText(	NULL, pDialog->getText(), -1, &rc, DT_NOCLIP, D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f ) );
+				SetRect( &rc, x+40, y+40, 50, 400 );
+				font->DrawText(	NULL, pDialog->getText(), -1, &rc, DT_NOCLIP, D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f ) );
 			}
 		}
 		DrawMouse(Mouse);
@@ -251,20 +278,20 @@ bool cGraphicsLayer::DrawRadar(cScene *Scene)
 	{
 		for(y = 0; y < SCENE_AREA; y++)
 		{
-			int idxTile=(y<<5) + x;
+			int idxTile=(y*SCENE_AREA) + x;
 			Scene->GetMiniRect(idxTile, &rc);
-			g_pSprite->Draw(texTiles, &rc, NULL, &D3DXVECTOR3((float)(x * 4 + RADAR_Xo), (float)(y * 4 + RADAR_Yo), 0.0f), 0xFFFFFFFF);
+			g_pSprite->Draw(texTiles, &rc, NULL, &D3DXVECTOR3((float)(x * 2 + RADAR_Xo), (float)(y * 2 + RADAR_Yo), 0.0f), 0xFFFFFFFF);
 		}
 	}
 
 	//Draw radar
-	x = RADAR_Xo + (Scene->cx << 2);
-	y = RADAR_Yo + (Scene->cy << 2);
-	fx = (SCENE_WIDTH<<2) + (RADAR_Xo + (Scene->cx<<2));
-	fy = (SCENE_HEIGHT<<2) + (RADAR_Yo + (Scene->cy<<2));
+	x = RADAR_Xo + (Scene->cx);// << 2);
+	y = RADAR_Yo + (Scene->cy);// << 2);
+	fx = (SCENE_WIDTH<<2) + (RADAR_Xo + (Scene->cx));//<<2));
+	fy = (SCENE_HEIGHT<<2) + (RADAR_Yo + (Scene->cy));//<<2));
 
 
-	SetRect(&rc,0,32,4,36); //un cuadrado de 4+4 blanco, para dibujar el rectángulo en el radar
+	SetRect(&rc,0,32,1,33); //un cuadrado de 2X2 blanco, para dibujar el rectángulo en el radar
 
 	for(int i = x; i < fx; i++)
 	{
@@ -307,20 +334,33 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 		{
 			pantx = SCENE_Xo + ((x-Scene->cx)<<5)+offsetTilt;
 
-			//n = Scene->map[(y<<5)+x]; /*VMH Utilizamos la info del mapa, no la de visibilidad*/
-			/***VMH*/
-			int idxTile=(y<<5)+x;
+
+			SetRect(&rc, 0, 0, 32, 32);
+			g_pSprite->Draw(texTiles,&rc,NULL, 
+				&D3DXVECTOR3(float(pantx),float(panty),0.0f), 
+				0xFFFFFFFF);
+
+			int idxTile=(y*SCENE_AREA)+x;
 
 			//n=Scene->getTileType(idxTile); //VMH new version
 			Scene->GetRect(idxTile,&rc);
 
-			g_pSprite->Draw(texTiles,&rc,NULL, 
+			if (Scene->IsCellAnimated(x,y))
+			{
+				g_pSprite->Draw(animatedTiles,&rc,NULL, 
 						&D3DXVECTOR3(float(pantx),float(panty),0.0f), 
 						0xFFFFFFFF);
+			}
+			else
+			{
+				g_pSprite->Draw(texTiles,&rc,NULL, 
+						&D3DXVECTOR3(float(pantx),float(panty),0.0f), 
+						0xFFFFFFFF);
+			}
 		}
 	}
 
-		for(x = 0; x < SCENE_AREA; x++)
+		/*for(x = 0; x < SCENE_AREA; x++)
 		{
 			for(y = 0; y < SCENE_AREA; y++)
 			{
@@ -328,15 +368,15 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 				Scene->GetMiniRect(idxTile, &rc);
 				g_pSprite->Draw(texTiles, &rc, NULL, &D3DXVECTOR3((float)(x * 4 + RADAR_Xo), (float)(y * 4 + RADAR_Yo), 0.0f), 0xFFFFFFFF);
 			}
-		}
+		}*/
 
 	//Draw radar
-	x=RADAR_Xo+(Scene->cx<<2);
+	/*x=RADAR_Xo+(Scene->cx<<2);
 	y=RADAR_Yo+(Scene->cy<<2);
 	SetRect(&rc,0,32,80,100);
 	g_pSprite->Draw(texTiles,&rc,NULL, 
 					&D3DXVECTOR3(float(x),float(y),0.0f), 
-					0xFFFFFFFF);
+					0xFFFFFFFF);*/
 	return true;
 }
 
@@ -366,7 +406,7 @@ bool cGraphicsLayer::DrawVisibility(cScene *Scene, cCritter *Critter)
 		for(x=Scene->cx;x<fx;x++)
 		{
 			pantx = SCENE_Xo + ((x-Scene->cx)<<5);
-			int idxTile=(y<<5)+x;
+			int idxTile=(y*SCENE_AREA)+x;
 
 			Scene->GetRect(idxTile,&rcScene);
 			
@@ -420,7 +460,7 @@ bool cGraphicsLayer::DrawVisibility(cScene *Scene, cCritter *Critter)
 	return true;
 }
 
-bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies)
+bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cEnemy** Enemies)
 {
 	int cx,cy,posx,posy;
 	RECT rc;
@@ -461,39 +501,23 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skelet
 		}
 	}
 	
-	//Draw Skeleton
-	Skeleton->GetCell(&cx,&cy);
-	if(Scene->IsVisible(cx,cy))
-	{
-		if(Scene->IsCellActive(cx, cy))
-		{
-			Skeleton->GetRect(&rc,&posx,&posy,Scene);
-			g_pSprite->Draw(texCharacters,&rc,NULL, 
-						&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-						0xFFFFFFFF);
-		}
-	}
-	Skeleton->GetRectRadar(&rc,&posx,&posy);
-	g_pSprite->Draw(texTiles,&rc,NULL, 
-					&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-					0xFFFFFFFF);
-	//Draw Fire
-	if(Critter->GetShooting())
-	{
-		if(Critter->IsFiring())
-		{
-			//Advance animation & draw
-			Critter->GetRectShoot(&rc,&posx,&posy,Scene);
-			g_pSprite->Draw(texCharacters,&rc,NULL, 
-							&D3DXVECTOR3(float(posx),float(posy),0.0f), 
-							0xFFFFFFFF);
-		}
-		else
-		{
-			//Advance animation
-			Critter->GetRectShoot(&rc,&posx,&posy,Scene);
-		}
-	}
+	////Draw Fire
+	//if(Critter->GetShooting())
+	//{
+	//	if(Critter->IsFiring())
+	//	{
+	//		//Advance animation & draw
+	//		Critter->GetRectShoot(&rc,&posx,&posy,Scene);
+	//		g_pSprite->Draw(texCharacters,&rc,NULL, 
+	//						&D3DXVECTOR3(float(posx),float(posy),0.0f), 
+	//						0xFFFFFFFF);
+	//	}
+	//	else
+	//	{
+	//		//Advance animation
+	//		Critter->GetRectShoot(&rc,&posx,&posy,Scene);
+	//	}
+	//}
 	return true;
 }
 
@@ -643,8 +667,8 @@ bool cGraphicsLayer::DrawDialog(cDialog* pDialog)
 
 
 	pDialog->getButtonPos(&xb, &yb);
-	SetRect(&r, 0,0,100,32);
-	g_pSprite->Draw(texTiles, &r, NULL, &D3DXVECTOR3((float)xb, (float)yb, 0.0f), 0xFFFFFFFF);
+	SetRect(&r, DIALOG_BUTTON_UL_X, DIALOG_BUTTON_UL_Y, DIALOG_BUTTON_BR_X, DIALOG_BUTTON_BR_Y);
+	g_pSprite->Draw(texDialog, &r, NULL, &D3DXVECTOR3((float)xb, (float)yb, 0.0f), 0xFFFFFFFF);
 
 
 	return true;

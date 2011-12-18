@@ -8,6 +8,7 @@
 #include "cWalkabilityFunctor.h"
 #include "cScene.h"
 
+#define CRITTER_LIVES 9
 
 class cScene;
 
@@ -37,6 +38,7 @@ public:
 	bool AlAtaquue();
 	void Damage(); //llamada cuando nos ha contactado un enemigo
 	bool IsAlive();//Indica si está vivo o no
+	int GetLives();
 
 private:
 	int x,y;		//Position in total map
@@ -54,6 +56,8 @@ private:
 	int shoot_seq;	//Shooter sequence animation control
 	int shoot_delay;//Shooter animation delay
 	bool move;
+
+	int Lives;
 };
 
 #endif

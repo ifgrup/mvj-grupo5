@@ -13,6 +13,7 @@ cDialog::cDialog(void)
 	PosXButton = 0;
 	PosYButton = 0;
 	DialogState = DIALOG_STATE_HIDE;
+	bSalir = false;
 }
 
 cDialog::~cDialog(void)
@@ -39,6 +40,11 @@ void cDialog::setText(char* s)
 
 	sText = (char*)malloc(len);
 	strcpy(sText, s);
+
+	int x = PosXFin - PosX - (DIALOG_BUTTON_BR_X / 3);
+	int y = PosYFin - 20;
+
+	setButtonPos(x, y);
 }
 
 char* cDialog::getText()
@@ -70,6 +76,9 @@ int cDialog::getState()
 int cDialog::OnButtonPressed()
 {
 	this->Hide();
+	if(bSalir)
+		return DIALOG_STATE_EXIT;
+
 	return DialogState;
 }
 
@@ -89,4 +98,9 @@ void cDialog::getButtonPos(int* x, int* y)
 {
 	*x = PosXButton + PosX;
 	*y = PosYButton + PosY;
+}
+
+void cDialog::Die()
+{
+	bSalir = true;
 }

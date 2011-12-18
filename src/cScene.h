@@ -11,7 +11,7 @@
 #define SCENE_HEIGHT	16
 
 //Dimension = Area^2
-#define SCENE_AREA		32
+#define SCENE_AREA		64
 
 //Map coordinate beginning
 #define SCENE_Xo		0
@@ -47,6 +47,7 @@ public:
 	bool IsCellActive(int cellx, int celly);
 	bool IsVisible(int cellx, int celly); // LHA
 	bool IsCellFired(int cx,int cy);
+	bool IsCellAnimated(int cx,int cy);
 	bool IsWalkeableHero(int cellx, int celly);
 	void ResetVisible();
 	CTile2D** getTilesMap() { return TilesMap; }
