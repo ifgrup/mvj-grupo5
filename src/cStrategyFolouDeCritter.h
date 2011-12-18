@@ -11,5 +11,6 @@ public:
 private:
 	int actualx;
 	int actualy;
+	bool first_detected;
 };
 

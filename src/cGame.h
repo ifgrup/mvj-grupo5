@@ -49,6 +49,7 @@ private:
 
 	void EfectoPantalla(int idEfecto); //hará un efecto visual para indicar que nos han dado
 	void LoadEnemies();
+	bool boton_derecho_nunca_pulsado;
 };
 
 #endif

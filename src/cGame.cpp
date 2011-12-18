@@ -39,11 +39,13 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 	pDialog->setPos(200, 100);
 	pDialog->setSize(400, 300);
 	pDialog->setButtonPos(180, 290);
-	pDialog->setText("Esto es una prueba que mola que te cagas por las\nbragas");
+	pDialog->setText("ESCAPE FROM ARKHAM!!!\n\nENCUENTRA EL CAMINO A CASA \nHUYENDO DE LOS ENEMIGOS!!\n\nMVJ UPC 2011-2012\n\nGRUPO 5\nLuis Hidalgo\nRoberto Rodriguez\nVictor Martin\n");
 	pDialog->Show();
 
 	//Enemies:
 	LoadEnemies();
+
+	boton_derecho_nunca_pulsado=true;
 
 	return true;
 }
@@ -312,6 +314,14 @@ void cGame::ProcessOrder()
 
 		if((Scene.IsCellActive(Scene.cx+cmx, Scene.cy+cmy))&&(Scene.IsWalkeableHero(Scene.cx+cmx, Scene.cy+cmy)))
 		{
+			
+			if (boton_derecho_nunca_pulsado)
+			{	
+				pDialog->setText("\n\nCON EL BOTÓN DERECHO, PRENDES FUEGO\n LA CASILLA!\n\nPERO OJO!NO DURA PARA SIEMPRE!!!\n\nY NO TODOS LOS ENEMIGOS LE TEMEN!!");
+				pDialog->Show();
+				boton_derecho_nunca_pulsado=false;
+			}
+			
 			Mouse->SetPointer(ATTACK);
 			if(release_and_pressbr)
 			{

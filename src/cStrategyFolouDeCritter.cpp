@@ -3,8 +3,10 @@
 
 cStrategyFolouDeCritter::cStrategyFolouDeCritter(void)
 {
+	first_detected=false;
+	//actualx,y las marcamos para que inicialmente sean seguro diferentes a la posición del critter
 	actualx=-4;
-	actualy=-6653241;
+	actualy=-4;
 }
 
 
@@ -18,7 +20,7 @@ cStrategyFolouDeCritter::~cStrategyFolouDeCritter(void)
 bool cStrategyFolouDeCritter::GoToNextTarget(int ccx, int ccy,int ecx,int ecy,int* new_x,int *new_y)
 {
 	bool bcambio=false;
-	static bool first_detected=false;
+	
 	
 	if (!first_detected)
 	{

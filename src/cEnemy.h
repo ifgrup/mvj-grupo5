@@ -7,6 +7,7 @@
 #include "cScene.h"
 #include "cWalkabilityFunctor.h"
 #include "cWalkabilityFunctorFlalling.h"
+#include "cWalkabilityFunctorRandom.h"
 #include "cStrategyFunctor.h"
 #include "cStrategyPatrol.h"
 #include "cStrategyFolouDeCritter.h"
@@ -14,7 +15,7 @@
 
 typedef enum WalkingTypes{
 	FLALLING=1,
-	FLISKINS=2,
+	RANDOM=2,
 	GRIJANDER=3
 }WalkingTypes;
 
@@ -58,6 +59,7 @@ private:
 	cPath* Trajectory; //Dinamic, with it's own walkeable function
 	int seq;		//Sequence animation control
 	int delay;		//Animation delay
+	int filaTilesPersonaje; //Fila del fichero characters.png donde está su animación
 
 public:
 	static bool IsThisTileWalkeableForMe(CTile2D*);

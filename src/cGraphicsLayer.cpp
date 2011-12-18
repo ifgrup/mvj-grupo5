@@ -291,35 +291,15 @@ bool cGraphicsLayer::DrawScene(cScene *Scene)
 	int miniMapaX = 672;
 	int miniMapaY = 60;
 
-	static int offsetTilt=0;
-	static int ticsSleep=0;
-
 	//Tile based map
 	fx=Scene->cx+SCENE_WIDTH;
 	fy=Scene->cy+SCENE_HEIGHT;
+	
+	int offsetTilt=CalculaOffsetTilt();
 
 	for(y=Scene->cy;y<fy;y++)
 	{
-		if (ticsTilt!=0)
-		{
-			ticsSleep++;
-			if (!(ticsSleep%40))
-			{
-				int inc=-1;
-				ticsTilt--;
-			
-				if (ticsTilt%2)
-					inc=-1;
-				else
-					inc=1;
-
-				offsetTilt=inc*5;
-			}
-		}
-		else
-		{
-			offsetTilt=0;
-		}
+		
 		
 		panty = SCENE_Yo + ((y-Scene->cy)<<5)+offsetTilt;
 		
@@ -673,4 +653,30 @@ bool cGraphicsLayer::DrawDialog(cDialog* pDialog)
 void cGraphicsLayer::EfectoTilt()
 {
 	ticsTilt=15;
+}
+
+int cGraphicsLayer::CalculaOffsetTilt()
+{
+	static int tics=0; //para no hacerlo a cada tick
+
+	int offset=0;
+
+	if (ticsTilt!=0)
+	{
+		tics++;
+		if (!(tics%2)) //Para hacer el tembleque un pelín más lento
+		{
+			int inc=-1;
+			ticsTilt--;
+		
+			if (ticsTilt%2)
+				inc=-1;
+			else
+				inc=1;
+			
+			offset=inc*5;
+		}
+	}
+	
+	return offset;
 }
