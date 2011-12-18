@@ -15,7 +15,6 @@
 #include "cMouse.h"
 #include "cDialog.h"
 #include "cCritter.h"
-#include "cSkeleton.h"
 #include "cEnemy.h"
 
 class cGraphicsLayer  
@@ -31,12 +30,12 @@ public:
 	
 	void LoadData();
 	void UnLoadData();
-	bool Render(int state, cMouse *Mouse, cScene *Scene, cCritter *Critter, cSkeleton *Skeleton,cEnemy** Enemies, cDialog* pDialog);
+	bool Render(int state, cMouse *Mouse, cScene *Scene, cCritter *Critter,cEnemy** Enemies, cDialog* pDialog);
 
 	bool DrawScene(cScene *Scene);
 	bool DrawRadar(cScene *Scene);
 	bool DrawVisibility(cScene *Scene, cCritter* Critter);
-	bool DrawUnits(cScene *Scene,cCritter *Critter,cSkeleton *Skeleton,cEnemy** Enemies);
+	bool DrawUnits(cScene *Scene,cCritter *Critter,cEnemy** Enemies);
 	bool DrawMouse(cMouse *Mouse);
 	bool DrawRect(RECT rc, D3DCOLOR color);
 
@@ -52,7 +51,7 @@ private:
 	LPD3DXSPRITE g_pSprite;
 
 	LPDIRECT3DTEXTURE9 texMain,texGame;
-	LPDIRECT3DTEXTURE9 texTiles,texCharacters,texMouse;
+	LPDIRECT3DTEXTURE9 texTiles,texCharacters,texMouse,animatedTiles;
 	LPDIRECT3DTEXTURE9 texFog;
 	LPDIRECT3DTEXTURE9 texVisited;
 	LPDIRECT3DTEXTURE9 texDialog;

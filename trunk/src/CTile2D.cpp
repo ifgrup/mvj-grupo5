@@ -20,20 +20,22 @@ CTile2D::~CTile2D(void)
 
 void CTile2D::GetMiniRect(RECT* r)
 {
-	SetRect(r,idTile<<5,0,((idTile+1)<<5)-28,4);
+	int tile = idTile - 1;
+	SetRect(r,tile<<5,0,((tile+1)<<5)-28,2);
 	return;
 }
 
 void CTile2D::GetRect(RECT* r)
 {
+	int tile = idTile - 1;
 	if (!isAnimated) //Es estática, por tanto, como hasta ahora, indice de la textura, y pinpan
 	{
-		SetRect(r,idTile<<5,0,(idTile+1)<<5,32);
+		SetRect(r,tile<<5,0,(tile+1)<<5,32);
 		return;
 	}
 	else //En función de la secuencia, será un índice u otro
 	{
-		int fila=idTile; //1ª fila las estáticas, luego, una fila por animación.Como empiezan en 1, no hay que sumar 1
+		int fila=idTile; //utilizamos idTile como fila de las animaciones en animated.png
 		int columna=seqAnimation;
 		
 		SetRect(r,columna<<5,fila<<5,(columna+1)<<5,(fila+1)<<5);
@@ -116,6 +118,13 @@ bool CTile2D::IsFired()
 {
 	return isFired;
 }
+
+bool CTile2D::IsAnimated()
+{
+	return isAnimated;
+}
+
+
 void CTile2D::setIdTile(int nidTile)
 {
 this->idTile=nidTile;

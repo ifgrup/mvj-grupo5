@@ -28,17 +28,17 @@ bool cGame::Init(HWND hWnd,HINSTANCE hInst,bool exclusive)
 
 	Graphics.LoadData();
 
-	Scene.LoadMap("map.txt");
+	Scene.LoadMap("map2.txt");
 
 	//sound 
 
-	Sound.Init();
+	//Sound.Init();
 	Sound.LoadData();
 	
 	pDialog = new cDialog();
 	pDialog->setPos(200, 100);
 	pDialog->setSize(400, 300);
-	pDialog->setButtonPos(180, 290);
+	//pDialog->setButtonPos(180, 290);
 	pDialog->setText("ESCAPE FROM ARKHAM!!!\n\nENCUENTRA EL CAMINO A CASA \nHUYENDO DE LOS ENEMIGOS!!\n\nMVJ UPC 2011-2012\n\nGRUPO 5\nLuis Hidalgo\nRoberto Rodriguez\nVictor Martin\n");
 	pDialog->Show();
 
@@ -121,10 +121,13 @@ bool cGame::LoopProcess()
 			{
 				int x, y;
 				pDialog->getButtonPos(&x, &y);
-				if(Mouse->In(x, y, x+100, y+32))
+				if(Mouse->In(x, y, x + DIALOG_BUTTON_BR_X, y + DIALOG_BUTTON_BR_Y))
 				{
 					if(Mouse->ButtonDown(LEFT))
-						pDialog->OnButtonPressed();
+					{
+						if(pDialog->OnButtonPressed() == DIALOG_STATE_EXIT)
+							PostQuitMessage(0);
+					}
 				}
 			}
 			else
@@ -154,7 +157,7 @@ bool cGame::LoopOutput()
 bool cGame::Render()
 {
 	bool res;
-	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,&Skeleton,listEnemies, pDialog);
+	res = Graphics.Render(state,Input.GetMouse(),&Scene,&Critter,listEnemies, pDialog);
 	return res;
 }
 
@@ -195,20 +198,9 @@ void cGame::ProcessOrder()
 				{
 					if(release_and_press)
 					{
-						//Attack
-						Skeleton.GetCell(&cx,&cy);
-						if(Mouse->InCell(&Scene,cx,cy))
-						{
-							if(!Critter.GetShooting())
-								Critter.GoToEnemy(Scene.getTilesMap(),Scene.cx+cx,Scene.cx+cy);
-								Sound.Playeffects(1);//sound vlr
-						}
 						//Movement
-						else
-						{
-							Mouse->GetCell(&cx,&cy);
-							Critter.GoToCell(Scene.getTilesMap(),Scene.cx+cx,Scene.cy+cy);
-						}
+						Mouse->GetCell(&cx,&cy);
+						Critter.GoToCell(Scene.getTilesMap(),Scene.cx+cx,Scene.cy+cy);
 					}
 				}
 				//Begin selection
@@ -266,13 +258,9 @@ void cGame::ProcessOrder()
 			Mouse->SetPointer(SELECT);
 			return;
 		}
-		//Mouse over Enemy
-		Skeleton.GetCell(&cx,&cy);
-		if(Mouse->InCell(&Scene,cx,cy))
-		{
-			Mouse->SetPointer(ATTACK);
-		}
-		else if(Mouse->In(s,SCENE_Yo+s,SCENE_Xf-s,SCENE_Yf-s))
+
+		//Mouse
+		if(Mouse->In(s,SCENE_Yo+s,SCENE_Xf-s,SCENE_Yf-s))
 		{
 			//Critter selected pointing, where to move
 			if(Critter.GetSelected())	Mouse->SetPointer(MOVE);
@@ -401,6 +389,12 @@ void cGame::ActualizarIA()
 			int i=rand()%N_EFECTOS_PANTALLA;
 			EfectoPantalla(1);
 			Sound.Playeffects(3);
+			if(!Critter.IsAlive())
+			{
+				pDialog->setText("\n\n\n\\tNO LO CONSEGUISTE!!\n\n\n\t\tGAME OVER!!");
+				pDialog->Die();
+				pDialog->Show();
+			}
 		}
 
 		{

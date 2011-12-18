@@ -14,40 +14,59 @@ cScene::cScene()
 
 cScene::~cScene(){}
 
+bool isWalkeable(int TileID)
+{
+	switch(TileID)
+	{
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+	case 15:
+	case 21:
+	case 22:
+	case 23:
+	case 24:
+	case 25:
+	case 31:
+	case 32:
+	case 33:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+
 void cScene::LoadMap(char *file)
 {
 	int i,j,k,n;
 
 	//VMH: Reservamos memoria para el resto de info del mapa, sólo para los punteros, el contenido se creará dinámicamente
-	TilesMap=(CTile2D**) malloc(sizeof(CTile2D*)*(SCENE_AREA*SCENE_AREA));
+	//TilesMap=(CTile2D**) malloc(sizeof(CTile2D*)*(SCENE_AREA*SCENE_AREA));
+	TilesMap = new CTile2D*[SCENE_AREA*SCENE_AREA];
 
 	FILE *f;
 	f=fopen(file,"r");
 	k=0;
-	for(i=0;i<SCENE_AREA;i++)
-	{
-		for(j=0;j<SCENE_AREA;j++)
-		{
-			fscanf(f,"%d",&n);
-			//pueden ser dos dígitos.el Id de tile, el de menor peso:
-			int idTile=abs(n)%10;
-			TilesMap[k]=new CTile2D(idTile); //VMH
-			
-			TilesMap[k]->setWalkeable(idTile==0); //Por defecto, walkeable si idTile==1
-			TilesMap[k]->setVisible(false);
-			TilesMap[k]->setFogged(true);
-			
-			
-			if (abs(n)>10)
-			{
-				TilesMap[k]->setAnimated(true);
-				TilesMap[k]->setNumSprites(n/10);
-				
-			}
-			k++;
 
-		}
+	for(int x = 0; x < SCENE_AREA*SCENE_AREA; x++)
+	{
+		fscanf(f,"%d",&n);
+		TilesMap[x]=new CTile2D(n); 
+		TilesMap[x]->setWalkeable(isWalkeable(n)); 
+		TilesMap[x]->setVisible(false);
+		TilesMap[x]->setFogged(true);
 	}
+
+
 
 	fclose(f);
 }
@@ -279,9 +298,7 @@ void cScene::SetFireTile(int cx,int cy)
 
 	int idx=cy*SCENE_AREA+cx;
 	TilesMap[idx]->setAnimated(true);
-	//IMPORTANTE: Falta poner el idTile correcto para que seleccione la animación de fuego
-	//TilesMap[idx]->setIdTile.....
-	TilesMap[idx]->setIdTile(3);
+	TilesMap[idx]->setIdTile(0);//la animación de fuego
 	TilesMap[idx]->setNumSprites(4);
 	TilesMap[idx]->setActive(true); //ask lha
 	TilesMap[idx]->setFired(true);
@@ -291,5 +308,12 @@ bool cScene::IsCellFired(int cx,int cy)
 {
 	int idx=cy*SCENE_AREA+cx;
 	return TilesMap[idx]->IsFired();
+	
+}
+
+bool cScene::IsCellAnimated(int cx,int cy)
+{
+	int idx=cy*SCENE_AREA+cx;
+	return TilesMap[idx]->IsAnimated();
 	
 }

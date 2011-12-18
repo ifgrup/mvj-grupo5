@@ -4,9 +4,11 @@
 
 cCritter::cCritter()
 {
-	SetPosition(384,96);
-	SetCell(12,3);
-	SetSelected(false);
+	SetPosition(32,32);
+	SetCell(1,1);
+	SetSelected(true);
+
+	Lives = CRITTER_LIVES;
 
 	seq=0;
 	delay=0;
@@ -210,11 +212,16 @@ return attack;
 void cCritter::Damage()
 {
 	//restará vida, y si es cero, muerto
-   
+   Lives--;
 }
 
 bool cCritter::IsAlive()
 {  //devuelve si está vivo o no el critter
    //	return vida!=0;
-  return true;
+  return Lives != 0;
+}
+
+int cCritter::GetLives()
+{
+	return Lives;
 }

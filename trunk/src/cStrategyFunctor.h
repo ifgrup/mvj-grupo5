@@ -1,5 +1,5 @@
 #pragma once
-#define ENEMY_DETECT_ZONE 2
+#define ENEMY_DETECT_ZONE 4
 
 class cStrategyFunctor
 {

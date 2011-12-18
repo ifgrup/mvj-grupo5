@@ -34,6 +34,7 @@ public:
 	bool IsVisited() {return isVisited;}
 	bool IsFogged()  {return isFogged;}
 	bool IsActive()  {return isActive;}
+	bool IsAnimated() ;
 
 	bool IsWalkeable() {return isWalkeable;}
 	bool IsEnemyWalkeable() {return isEnemyWalkeable;}   
