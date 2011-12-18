@@ -87,7 +87,8 @@ bool vlrSoundLayer::PlaySound(int state){
 			channelef->setPaused(true);
 			channelef1->setPaused(true);
 		channel->isPlaying(&sonando);
-		if(sonando==false){
+		if(sonando==false)
+		{
 			result =system->playSound(FMOD_CHANNEL_FREE, sound1, false, &channel);
 			
 		}
@@ -100,12 +101,22 @@ bool vlrSoundLayer::PlaySound(int state){
 			channelef1->setPaused(true);
 			
 			channel2->isPlaying(&sonando);
-			if(sonando==false){
+			if(sonando==false)
+			{
 			sound2->setMode(FMOD_LOOP_NORMAL);
 			result =system->playSound(FMOD_CHANNEL_FREE, sound2, false, &channel2);
 			}
 			break;
-
+case STATE_WIN:
+			channel->setPaused(false);
+			channel2->setPaused(true);
+		channel->isPlaying(&sonando);
+		if(sonando==false)
+		{
+			result =system->playSound(FMOD_CHANNEL_FREE, sound1, false, &channel);
+			
+		}
+		break;
 
 	 }
 

@@ -131,6 +131,11 @@ void cGraphicsLayer::LoadData()
 								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
 								0xffffffff,NULL,NULL,&animatedTiles);
 
+	//WIN
+	D3DXCreateTextureFromFileEx(g_pD3DDevice,"win.png",0,0,1,0,D3DFMT_UNKNOWN,
+								D3DPOOL_DEFAULT,D3DX_FILTER_NONE,D3DX_FILTER_NONE,
+								NULL,NULL,NULL,&texWin);
+
 }
 
 void cGraphicsLayer::UnLoadData()
@@ -186,6 +191,13 @@ void cGraphicsLayer::UnLoadData()
 		animatedTiles = NULL;
 
 	}
+
+if(texWin)
+	{
+		texWin->Release();
+		texWin = NULL;
+	}
+
 }
 
 bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Critter,cEnemy** Enemies, cDialog* pDialog)
@@ -206,6 +218,7 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 								break;
 
 				case STATE_GAME:
+					{
 								DrawScene(Scene);
 								DrawUnits(Scene,Critter,Enemies);
 								DrawVisibility(Scene, Critter);
@@ -235,6 +248,11 @@ bool cGraphicsLayer::Render(int state,cMouse *Mouse,cScene *Scene,cCritter *Crit
 									DrawDialog(pDialog);
 								}
 								break;
+					}
+					case STATE_WIN:
+								g_pSprite->Draw(texWin,NULL,NULL,&D3DXVECTOR3(0.0f,0.0f,0.0f),0xFFFFFFFF);
+								break;
+
 			}
 
 		g_pSprite->End();

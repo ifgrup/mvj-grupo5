@@ -50,7 +50,7 @@ private:
 	LPDIRECT3DDEVICE9 g_pD3DDevice;
 	LPD3DXSPRITE g_pSprite;
 
-	LPDIRECT3DTEXTURE9 texMain,texGame;
+	LPDIRECT3DTEXTURE9 texMain,texGame,texWin;
 	LPDIRECT3DTEXTURE9 texTiles,texCharacters,texMouse,animatedTiles;
 	LPDIRECT3DTEXTURE9 texFog;
 	LPDIRECT3DTEXTURE9 texVisited;

@@ -88,7 +88,7 @@ void CTile2D::IncTickCount()
 	//Control de la animación de fuego
 	if (this->isFired && nTicsAnimation>=TICS_OF_FIRE)
 	{//Apagamos el fuego,dejamos el tile chamuscao, y lo ponemos como walkeable
-		this->idTile=4; //Tile chamuscada
+		this->idTile=250; //Tile chamuscada
 		this->isWalkeable=true;
 		this->isAnimated=false;
 		this->isFired=false;
