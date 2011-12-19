@@ -25,6 +25,7 @@ public:
 	bool Init(HWND hWnd,HINSTANCE hInst,bool exclusive);
 	bool Loop(); 
 	void Finalize();
+	short GetNumEnemies();
 
 private:
 	bool LoopInput();
@@ -33,7 +34,8 @@ private:
 
 	void UpdateScene();
 	void ActualizarIA();
-	int win();
+	void AutoScroll();
+    int CheckIfWin();
 	cGraphicsLayer Graphics;
 	cInputLayer Input;
 	cScene Scene;
@@ -52,7 +54,6 @@ private:
 	void EfectoPantalla(int idEfecto); //hará un efecto visual para indicar que nos han dado
 	void LoadEnemies();
 	bool boton_derecho_nunca_pulsado;
-	
 };
 
 #endif
