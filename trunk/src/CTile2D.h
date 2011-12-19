@@ -5,6 +5,7 @@
 
 
 #define TICS_OF_FIRE 300 //tics de duración de la animación de fuego de una tile
+#define ID_TILE_CHAMUSCADA 250;
 
 class CTile2D
 {
