@@ -63,6 +63,9 @@ public:
 	void MoveScroll(int x,int y);
 	void SetAnimateTile(int cx,int cy);
 	void SetFireTile(int cx,int cy);
+	void CentrarEscenaEnTile(int px, int py);
+	void MoveOffset(int dx, int dy);
+
 private:
 	CTile2D  **TilesMap;  /*VMH mapa cpn la información de las casillas. Inicialmente sólo tenía el índice para acceder al bitmap.
 			     Ahora contiene más información, por eso utilizamos la estuctura InfoTile2D*/

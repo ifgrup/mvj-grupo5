@@ -225,3 +225,11 @@ int cCritter::GetLives()
 {
 	return Lives;
 }
+
+int cCritter::Faced()
+{
+	if (this->Trajectory)
+		return this->Trajectory->Faced();
+	else
+		return STOP; //
+}

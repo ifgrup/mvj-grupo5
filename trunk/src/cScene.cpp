@@ -116,8 +116,8 @@ void cScene::MoveByRadar(int x,int y)
 	//move=0..12,0..15
 	//rect=(80x68)/4=20x17
 
-	cx=(x-RADAR_Xo)>>2;
-	cy=(y-RADAR_Yo)>>2;
+	cx=(x-RADAR_Xo)>>1;
+	cy=(y-RADAR_Yo)>>1;
 
 	if(cx<=9)		cx=0;
 	else if(cx>=21)	cx=12;
@@ -316,4 +316,35 @@ bool cScene::IsCellAnimated(int cx,int cy)
 	int idx=cy*SCENE_AREA+cx;
 	return TilesMap[idx]->IsAnimated();
 	
+}
+
+
+void cScene::CentrarEscenaEnTile(int px, int py)
+{
+  //Función análoga a MoveByRadar, pero genérica, con nuestros cambios  y comentarios just in case
+  int mitad_x=SCENE_WIDTH >>1 ;
+  int mitad_y=SCENE_HEIGHT >>1 ;
+
+  if (px > mitad_x)
+	  this->cx-=mitad_x;
+  else
+	  this->cx=0;
+  
+  if (py > mitad_y)
+	  this->cy-=mitad_y;
+  else
+	  this->cx=0;
+
+
+}
+
+
+void cScene::MoveOffset(int dx, int dy)
+{
+    if(cx+dx >=0 && cx+dx <SCENE_AREA+SCENE_WIDTH)
+		cx+=dx;
+
+	if(cy+dy >=0 && cy+dy <SCENE_AREA+SCENE_HEIGHT)
+		cy+=dy;
+
 }
