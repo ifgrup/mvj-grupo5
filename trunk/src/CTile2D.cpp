@@ -21,7 +21,11 @@ CTile2D::~CTile2D(void)
 void CTile2D::GetMiniRect(RECT* r)
 {
 	int tile = idTile - 1;
-	SetRect(r,tile<<5,0,((tile+1)<<5)-28,2);
+	//KK
+	if (this->IsActive()||this->IsVisible())
+		SetRect(r,tile<<5,0,((tile+1)<<5)-28,2);
+	else
+		SetRect(r,32,0,36,2); //Para que el radar se vea oscuro
 	return;
 }
 
