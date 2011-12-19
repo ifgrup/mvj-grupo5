@@ -57,7 +57,7 @@ private:
 	int shoot_seq;	//Shooter sequence animation control
 	int shoot_delay;//Shooter animation delay
 	bool move;
-
+	bool pupita;
 	int Lives;
 };
 

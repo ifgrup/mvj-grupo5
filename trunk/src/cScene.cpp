@@ -342,6 +342,7 @@ void cScene::CentrarEscenaEnTile(int px, int py)
 void cScene::MoveOffset(int dx, int dy)
 {
     if(cx+dx >=0 && cx+dx <SCENE_AREA+SCENE_WIDTH)
+		
 		cx+=dx;
 
 	if(cy+dy >=0 && cy+dy <SCENE_AREA+SCENE_HEIGHT)
