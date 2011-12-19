@@ -26,7 +26,7 @@
 #define RADAR_Yf		592
 
 // LHA
-#define RADIO_VISIBLE   10
+#define RADIO_VISIBLE 7
 
 #include "CTile2D.h" 
 
