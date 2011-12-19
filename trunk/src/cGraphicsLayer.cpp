@@ -4,7 +4,7 @@
 #include "cLog.h"
 #include <stdio.h>
 
-
+extern cGame Game;
 cGraphicsLayer::cGraphicsLayer()
 {
 	g_pD3D = NULL;
@@ -302,14 +302,15 @@ bool cGraphicsLayer::DrawRadar(cScene *Scene)
 		}
 	}
 
-	//Draw radar
-	x = RADAR_Xo + (Scene->cx);// << 2);
-	y = RADAR_Yo + (Scene->cy);// << 2);
-	fx = (SCENE_WIDTH<<2) + (RADAR_Xo + (Scene->cx));//<<2));
-	fy = (SCENE_HEIGHT<<2) + (RADAR_Yo + (Scene->cy));//<<2));
+	//Dibujar el rectángulo con la escena actual del mapa:
+	//cada tile ocupa 2 pixels en el mapa del radar
+    
+	x = RADAR_Xo + (Scene->cx)*2;// << 2);
+	y = RADAR_Yo + (Scene->cy)*2;// << 2);
+	fx = RADAR_Xo + (Scene->cx+SCENE_WIDTH)*2;//<<2));
+	fy = RADAR_Yo + (Scene->cy+SCENE_HEIGHT)*2;//<<2));
 
-
-	SetRect(&rc,0,32,1,33); //un cuadrado de 2X2 blanco, para dibujar el rectángulo en el radar
+	SetRect(&rc,0,32,2,34); //un cuadrado de 2X2 blanco, para dibujar el rectángulo en el radar
 
 	for(int i = x; i < fx; i++)
 	{
@@ -506,7 +507,7 @@ bool cGraphicsLayer::DrawUnits(cScene *Scene,cCritter *Critter,cEnemy** Enemies)
 					&D3DXVECTOR3(float(posx),float(posy),0.0f), 
 					0xFFFFFFFF);
 	//Draw Enemies:
-	for (int i=0;i<4;i++)
+	for (int i=0;i<Game.GetNumEnemies();i++)
 	{
 		cEnemy* bicho=Enemies[i];
 		bicho->GetCell(&cx,&cy);
