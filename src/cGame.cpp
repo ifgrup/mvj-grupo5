@@ -330,7 +330,7 @@ void cGame::ProcessOrder()
 			Mouse->SetPointer(ATTACK);
 			if(release_and_pressbr)
 			{
-				Sound.Playeffects(1);
+				Sound.Playeffects(DISPARO);
 				release_and_pressbr=false;
 				//Se marca el tile como animado, con el fuego, y además se marca a false el flag de walkability
 				Scene.SetFireTile(Scene.cx+cmx,Scene.cy+cmy);
@@ -405,7 +405,7 @@ void cGame::ActualizarIA()
 			Critter.Damage(); //Hacer daño al critter
 			int i=rand()%N_EFECTOS_PANTALLA;
 			EfectoPantalla(1);
-			Sound.Playeffects(3);
+			Sound.Playeffects(ATAQUE);
 			if(!Critter.IsAlive())
 			{
 				pDialog->setText("\n\n\n\\tNO LO CONSEGUISTE!!\n\n\n\t\tGAME OVER!!");
