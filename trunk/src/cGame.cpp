@@ -139,7 +139,7 @@ bool cGame::LoopProcess()
 				//Update Scene //VMH:
 				ProcessOrder();
 				UpdateScene();
-				state=win();
+				state=CheckIfWin();
 			}
 			break;
 		}
@@ -231,10 +231,14 @@ void cGame::ProcessOrder()
 			{
 				if(release_and_press)
 				{
-					int radar_cell_x = (mx-RADAR_Xo) >> 2, //[672..799]/4=[0..31]
-						radar_cell_y = (my-RADAR_Yo) >> 2; //[ 60..187]/4=[0..31]
+					//el radar tiene 128 pixels, y representa 64x64 tiles.
+					//por tanto, calculamos distancia en pixels desde la coordenada del mouse hasta la esquina del radar,
+					// y cada dos pixels es un tile, por tanto, dividimos entre 2 (1 bit a la derecha)
+					int radar_cell_x = (mx-RADAR_Xo) >> 1,
+						radar_cell_y = (my-RADAR_Yo) >> 1;
 
 					Critter.GoToCell(Scene.getTilesMap(),radar_cell_x,radar_cell_y);
+				
 				}
 			}
 			else
@@ -330,10 +334,6 @@ void cGame::ProcessOrder()
 				release_and_pressbr=false;
 				//Se marca el tile como animado, con el fuego, y además se marca a false el flag de walkability
 				Scene.SetFireTile(Scene.cx+cmx,Scene.cy+cmy);
-				char kk[100];
-		sprintf(kk,"puerta %d %d\n",Scene.cx+cmx,Scene.cy+cmy);
-		cLog::Instance()->Msg(kk);
-				
 			}
 		}
 	}
@@ -346,8 +346,10 @@ void cGame::UpdateScene()
 {
 	int cx,cy;
     Critter.GetCell(&cx,&cy);
+	AutoScroll();
 	Scene.UpdateVisibleZone(cx,cy);
 	Scene.IncTickCount();
+	
 
 }
 void cGame::UpdateEnemiesTarget(int cx, int cy)
@@ -444,7 +446,80 @@ void cGame::LoadEnemies()
 
 	fclose(f);
 }
-int cGame::win()
+
+
+void cGame::AutoScroll()
+{
+	int cx,cy;
+	Critter.GetCell(&cx,&cy);
+
+	//obtenemos las coordenadas de las tiles en sistema de coordenadas de pantalla
+	cx=cx-Scene.cx;
+	cy=cy-Scene.cy;
+	
+	int MARGEN_X=7;
+	int MARGEN_Y=4;
+	int DESP=1;
+
+	/*if ( (cx>5 || cx < (SCENE_WIDTH-5)) && (cy >>5 || cy < (SCENE_HEIGHT -5)))
+		return;*/
+
+
+	//variables para calcular el desplazamiento en tiles que haremos a la escena para el scroll
+	int despx=0;
+	int despy=0;
+
+	int dir=Critter.Faced();
+
+	if (dir == N || dir == NE || dir ==NO)
+	{
+		//hacia arriba:
+		if (cy < MARGEN_Y)
+		{
+			despy =-1*DESP;
+		}
+	}
+	
+	if (dir == S || dir == SE || dir ==SO)
+	{
+		//hacia abajo:
+		if (cy > SCENE_HEIGHT-MARGEN_Y) 
+		{
+			despy =DESP;
+		}
+	}
+	
+	if (dir == E || dir == NE || dir ==SE)
+	{
+		//hacia derecha:
+		if (cx > SCENE_WIDTH-MARGEN_X) 
+		{
+			despx=DESP;
+		}
+	}
+	
+	if (dir == O || dir == NO || dir ==SO)
+	{
+		//hacia izquierda:
+		if (cx < MARGEN_X)
+		{
+			despx = -1*DESP;
+		}
+	}
+
+	if(despx || despy)
+	{
+		Scene.MoveOffset(despx,despy);
+	}
+
+}
+
+short cGame::GetNumEnemies()
+{
+	return num_enemies;
+}
+
+int cGame::CheckIfWin()
 {
 	int cxf,cyf; 
 
